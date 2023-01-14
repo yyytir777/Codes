@@ -1,5 +1,5 @@
 #include <iostream>
-#include <algorithm> //sortí•¨ìˆ˜
+#include <algorithm> //sort?•¨?ˆ˜
 using namespace std;
 
 int main(){
