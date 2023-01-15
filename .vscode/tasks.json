@@ -75,7 +75,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}\\exe\\${fileBasenameNoExtension}.exe"
             ],
             "options": {
                 "cwd": "c:/MinGW/bin"
