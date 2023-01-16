@@ -58,7 +58,7 @@ int main(){
                 editor.erase(--cursor);
             }
         }
-
+        
         else if(tmp == "P"){  
             char add;
             cin >> add;
