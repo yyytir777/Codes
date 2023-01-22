@@ -5,7 +5,7 @@ int main(){
     int n;
     cin >> n;
     int cnt = n;
-    int arr_n[n];
+    int *arr_n = new int[n];
 
     for(int i = 0; i < n; i++){
         cin >> arr_n[i];
