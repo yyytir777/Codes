@@ -5,7 +5,7 @@ using namespace std;
 /*
 È¦¼ö -> No
 Using Stack :
-Using Array : 
+Using Array :
 Using list :
 Using vector : ...?
 */
