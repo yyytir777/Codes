@@ -30,10 +30,18 @@ int main(){
     q.pop();
 
     vector <int>::iterator iter;
+    iter = result.begin();
+
 
     cout << "<";
-    for(iter = result.begin(); iter < result.end() - 1; iter++){
+    while(1){
+        if(iter == result.end() - 1){
+            cout << *iter;
+            break;
+        }
         cout << *iter << ", ";
+        iter++;
     }
-    cout << *iter << ">";
+    cout << ">";
+    return 0;
 }

@@ -6,7 +6,7 @@ using namespace std;
 첫번째 : 함수
 두번째 : 배열길이
 세번째 : 배열
--> deque 사용
+-> stack or linkedlist or deque 사용
 
 R -> 배열의 수 뒤집음(뒤에서부터 읽기)
 D -> 첫번째 수 버림 but 배열 비어있으면 error
@@ -29,7 +29,8 @@ int main(){
             0 ~ 9
             , ] ->
             */
-            
+           
+            // string형 배열에서 숫자만 추출
             if(arr[j] == '['){
                 continue;
             }
