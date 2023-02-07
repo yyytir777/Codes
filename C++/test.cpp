@@ -2,6 +2,9 @@
 using namespace std;
 
 int main(){
-    cout << "¾È³çÇÏ¼¼¿ä";
+    for(int i = 0; i < 97; i++){
+        cout << "»ç¶ûÇØ";
+    }
+    
     return 0;
 }
