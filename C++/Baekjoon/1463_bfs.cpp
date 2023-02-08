@@ -1,6 +1,6 @@
 #include <iostream>
 #include <queue>
-#define MAX 10000
+#define MAX 1000000
 using namespace std;
 
 bool arr[MAX] = {false,};
