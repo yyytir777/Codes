@@ -1,22 +1,19 @@
 #include <iostream>
 using namespace std;
 
-int arr[41] = {0};
+int arr[41] = {};
 
 int fibonacci(int n) {
-    if (n == 0) {
-        arr[0] = 0;
-        return arr[0];
-    }
-    else if (n == 1) {
-        arr[1] = 1;
-        return arr[1];
-    }
-    if(arr[n] != 0) return arr[n];
-    else {
-        arr[n] = fibonacci(n - 1) + fibonacci(n - 2);
+    if (n <= 1) {
+        arr[n] = n;
         return arr[n];
     }
+
+    if(arr[n] != 0)
+        return arr[n];
+
+    arr[n] = fibonacci(n - 1) + fibonacci(n - 2);
+    return arr[n];
 }
 
 
@@ -35,7 +32,7 @@ int main(){
             cout << "0 1" << '\n';
         }
         else{
-            cout << arr[a-1] << " " << arr[a-2] << '\n';
+            cout << arr[a-1] << " " << arr[a] << '\n';
         }   
     }
     return 0;
