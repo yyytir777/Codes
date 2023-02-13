@@ -62,15 +62,6 @@ int main(){
         adj_matrix[x][y] = 1;
         adj_matrix[y][x] = 1;
     }
-    
-    /*
-    for(int i = 0; i < N; i++){
-        for(int j = 0; j < N; j++){
-            cout << adj_matrix[i][j] << " ";
-        }
-        cout << "\n"; 
-    }
-    */
 
     init();
     DFS(V);
