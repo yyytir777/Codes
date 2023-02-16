@@ -15,11 +15,13 @@ int main(){
         cin >> coin[i];
     }
 
-    for(int i = 0; i < k; i++){
-        while(dp[i] == k){
-            if(dp[i] > k) continue;
-            
+    dp[0] = 1;
+    for(int i = 0; i < n; i++){
+        for(int j = coin[i]; j <= k; j++){
+            dp[j] += dp[j - coin[i]]; 
         }
     }
+
+    cout << dp[k];
     return 0;
 }
