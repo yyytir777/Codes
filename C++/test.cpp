@@ -1,7 +1,9 @@
 #include <iostream>
 using namespace std;
-
+#define n 1000
 int main(){
-    cout << " ";
+    for(int i = 0; i < n; i++){
+        cout << "ÍÔ";
+    }
     return 0;
 }
