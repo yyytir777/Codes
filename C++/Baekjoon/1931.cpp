@@ -10,10 +10,10 @@ vector<pair<int, int>> v;
 
 //내림차순으로 정렬
 bool compare(pair<int, int> p1, pair<int, int> p2){
-    if(p1.first == p2.first){
-        return p1.second > p2.second;
+    if(p1.second == p2.second){
+        return p1.first < p2.first;
     }
-    return p1.first > p2.first;
+    return p1.second < p2.second;
 }
 
 int main(){
@@ -28,21 +28,21 @@ int main(){
     }
 
     //끝나는 시간이 큰 순서대로 정렬 > 시작하는 시간이 큰 순서대로 정렬
-    sort(v.begin(), v.end(), compare);
+    sort(v.begin(), v.end(),compare);
     
+    for(int i = 0; i < v.size(); i++){
+        cout << v[i].first << " " << v[i].second << endl;
+    }
 
     int cnt = 0;
-    int j, k = 0;
-    for(int i = 0; i < v.size(); i++){
-        int start_time = v[j].second;
-        int end_time = v[k+1].first;
+    int end_time;
+    int start_time = v[0].first;
 
-        if(start_time >= end_time){
+    for(int i = 1; i < n; i++){
+        end_time = v[i].second;
+        if(start_time <= end_time){
             cnt++;
-            j++;
-        }
-        else{
-            k++;
+            start_time = v[i].first;
         }
     }
 
