@@ -44,5 +44,6 @@
         "typeinfo": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled",
-    "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-18.0.1.1"
+    "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-18.0.1.1",
+    "python.analysis.typeCheckingMode": "basic"
 }
