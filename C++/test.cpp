@@ -2,8 +2,6 @@
 using namespace std;
 
 int main(){
-    for(int i = 0; i < 3; i++){
-        cout << "asdf";
-    }
+    cout << 1;
     return 0;
 }
