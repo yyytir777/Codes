@@ -1,58 +1,45 @@
 #include <iostream>
+#include <algorithm>
+#include <vector>
 using namespace std;
-#define M 1000000
 
-int tree_length[M];
+vector<int> tree;
 
 int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-
-    int n, m;
-    cin >> n >> m; //n = 나무의 수, m = 필요한 나무 길이
-
+    long long n, m;
+    scanf("%lld %lld", &n, &m); //n = 나무의 수, m = 필요한 나무 길이
     for(int i = 0; i < n; i++){
-        cin >> tree_length[i];
+        scanf("%lld", &tree[i]);
     }
 
-    int max = tree_length[0];
-    int min = tree_length[0];
+    sort(tree.begin(), tree.end());
 
-    for(int i = 0; i < n; i++){
-        if(tree_length[i] < min){
-            min = tree_length[i];
-        }
-        
-        if(tree_length[i] > max){
-            max = tree_length[i];
-        }
-    }
+    long long min, max, mid, sum;
 
-    int sum = 0;
-    int mid;
+    min = tree[0];
+    max = tree[n-1];
+
+    int answer = 0;
 
     while(min <= max){
-        mid = (int)((min + max) / 2);
-        
+        mid = (min + max) / 2;
+        sum = 0;
+
         for(int i = 0; i < n; i++){
-            if(tree_length[i] > mid){
-                sum += (tree_length[i] - mid);
+            if(tree[i] > mid){
+                sum += (tree[i] - mid);
             }
         }
 
-        if(sum > m){
-            min = mid;
-            sum = 0;
-        }
-        else if(sum < m){
-            max = mid;
-            sum = 0;
+        if(sum >= m){
+            answer = mid;
+            min = mid + 1;
         }
         else{
-            break;
+            max = mid - 1;
         }
     }
+    cout << answer << '\n';
 
-    cout << mid;
     return 0;
 }
