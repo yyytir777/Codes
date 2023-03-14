@@ -1,8 +1,6 @@
 #include <iostream>
 using namespace std;
 
-
-
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(NULL);
@@ -10,16 +8,26 @@ int main(){
     int m, n;
     cin >> m >> n;
 
-    for(int i = m; i <= n; i++){
-        int cnt = 0;
-        for(int j = 1; j <= i; j++){
-            if(i % j == 0){ //나누어지면
-                cnt++;
-            }
+    int arr[n+1] = {0,};
+
+    for(int i = 2; i <= n; i++){
+        arr[i] = i;
+    }
+
+    for(int i = 2; i * i <= n; i++){
+        if(arr[i] == 0){
+            continue;
         }
-        if(cnt == 2){
+        for(int j = i * 2; j <= n; j += i){
+            arr[j] = 0;
+        }
+    }
+
+    for(int i = m; i <= n; i++){
+        if(arr[i] != 0){
             cout << i << '\n';
         }
     }
+    
     return 0;
 }
