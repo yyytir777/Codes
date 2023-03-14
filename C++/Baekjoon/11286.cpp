@@ -1,10 +1,10 @@
 #include <iostream>
+#include <vector>
 #include <queue>
 #include <algorithm>
 using namespace std;
 
-queue<pair<int, bool>> pq;//ture = + & false = -
-
+priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> v;//ture = + & false = -
 
 int main(){
     ios::sync_with_stdio(false);
@@ -18,25 +18,25 @@ int main(){
 
         if(x != 0){
             if(x >= 0){
-                pq.push(make_pair(x, 0));
+                v.push(make_pair(x, 1)); // 1 -> 양수
             }
             else if(x < 0){
-                pq.push(make_pair(x, 1));
+                v.push(make_pair(-x, 0)); // 0 -> 음수
             }
         }
         else{ // x == 0
-            if(pq.empty()){
+            if(v.empty()){
                 cout << "0" << '\n';
                 continue;
             }
             else{
-                if(pq.top().second == 0){
-                    cout << pq.top().first << '\n';
+                if(v.top().second == 1){
+                    cout << v.top().first << '\n';
                 }
-                else if(pq.top().second == 1){
-                    cout << pq.top().first << '\n';                    
+                else if(v.top().second == 0){
+                    cout << -v.top().first << '\n';                    
                 }
-                pq.pop();
+                v.pop();
             }
         }
     }
