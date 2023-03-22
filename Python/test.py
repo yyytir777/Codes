@@ -1,16 +1,9 @@
-scores_list = []
-sum = 0
+import copy
 
-for i in range(5):
-    score = int(input("?ą? ? ?? Ľ???¤ : "))
-    scores_list.append(score)
-    sum += score
+a = [1, 2, [3, 4]]
+b = copy.deepcopy(a)
 
-scoreAvg = sum / len(scores_list)
+b.append(5)
 
-cnt = 0
-for i in range(len(scores_list)):
-    if scores_list[i] >= scoreAvg:
-        cnt += 1
-
-print("80?  ?´? ?ą? ? ë°ě?? ????? ", cnt, "ëŞě??¤")
+print(b)
+print(a)
