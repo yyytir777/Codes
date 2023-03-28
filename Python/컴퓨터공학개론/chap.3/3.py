@@ -12,3 +12,5 @@ elif bmi >= 25 and bmi < 30:
     print("과체중입니다.")
 elif bmi >= 20 and bmi < 25:
     print("정상입니다.")
+else:
+    print("저체중입니다.")

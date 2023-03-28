@@ -1,6 +1,17 @@
 #4번 문제, C135333, 임원재
 
-num = int(input("정수를 입력하시오: "))
+weight = float(input("무게(킬로그램): "))
+height = float(input("키(미터)): "))
 
-if (num % 2 == 0 and num % 3 != 0) or (num % 2 != 0 and num % 3 == 0):
-    print("2 또는 3으로 나누어지지만 2와 3으로 동시에 나누어지지 않는 수")
+bmi = weight / (height ** 2)
+print("당신의 BMI:", bmi)
+
+match bmi:
+    case 20:
+        print("저체중입니다.")
+    case 25:
+        print("정상입니다.")
+    case 30:
+        print("과체중입니다.")
+    case default:
+        print("비만입니다.")

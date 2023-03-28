@@ -1,13 +1,8 @@
 #5번 문제, C135333, 임원재
 
-import random
-lotteryNumber = random.randint(10,99)
+num = int(input("정수를 입력하시오: "))
 
-num = int(input("복권 번호(10-99사이)를 입력하시오: "))
-
-if num // 10 == lotteryNumber // 10 and num % 10 == lotteryNumber % 10:
-    print("복권번호는 %d입니다. 상금은 100만원입니다." %lotteryNumber)
-elif num // 10 == lotteryNumber // 10 or num % 10 == lotteryNumber % 10:
-    print("복권번호는 %d입니다. 상금은 50만원입니다." %lotteryNumber)
+if (num % 2 == 0 and num % 3 != 0) or (num % 2 != 0 and num % 3 == 0):
+    print("2 또는 3으로 나누어지지만 2와 3으로 동시에 나누어지지 않는 수")
 else:
-    print("복권번호는 %d입니다. 상금은 없습니다." %lotteryNumber)
+    print("찾는 조건을 만족하지 않는 수")

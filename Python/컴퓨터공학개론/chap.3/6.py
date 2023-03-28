@@ -1,12 +1,13 @@
 #6번 문제, C135333, 임원재
 
-a = int(input("숫자 1: "))
-b = int(input("숫자 2: "))
-c = int(input("숫자 3: "))
+import random
+lotteryNumber = random.randint(10,99)
 
-if b >= a >= c or c >= a >= b:
-    print(a)
-elif a >= b >= c or c >= b >= a:
-    print(b)
+num = int(input("복권 번호(10-99사이)를 입력하시오: "))
+
+if num // 10 == lotteryNumber // 10 and num % 10 == lotteryNumber % 10:
+    print("복권번호는 %d입니다. 상금은 100만원입니다." %lotteryNumber)
+elif num // 10 == lotteryNumber // 10 or num % 10 == lotteryNumber % 10:
+    print("복권번호는 %d입니다. 상금은 50만원입니다." %lotteryNumber)
 else:
-    print(c)
+    print("복권번호는 %d입니다. 상금은 없습니다." %lotteryNumber)
