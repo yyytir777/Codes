@@ -7,11 +7,11 @@ bmi = weight / (height ** 2)
 print("당신의 BMI:", bmi)
 
 match bmi:
-    case 20:
-        print("저체중입니다.")
-    case 25:
-        print("정상입니다.")
-    case 30:
-        print("과체중입니다.")
-    case default:
+    case x if x >= 30:
         print("비만입니다.")
+    case x if x >= 25:
+        print("과체중입니다.")
+    case x if x >= 20:
+        print("정상입니다.")
+    case _:
+        print("저체중입니다.")
