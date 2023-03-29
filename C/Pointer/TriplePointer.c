@@ -7,5 +7,5 @@ int main(){
     int ***tptr = &dptr;
 
     printf("%d %d %d\n", *ptr, **dptr, ***tptr);
-    return
+    return 0;
 }
