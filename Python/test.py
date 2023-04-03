@@ -1,9 +1,13 @@
-import copy
+def max(num1, num2):
+    if num1 > num2:
+        return num1
+    else:
+        return num2
+    
+def main():
+    i = 5
+    j = 2
+    k = max(i, j)
+    print("큰 수 = %d" %max(i, j))
 
-a = [1, 2, [3, 4]]
-b = copy.deepcopy(a)
-
-b.append(5)
-
-print(b)
-print(a)
+main()
