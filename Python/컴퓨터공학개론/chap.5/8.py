@@ -1,13 +1,22 @@
 #8번 문제, C135333, 임원재
 
 def convertChar(c):
-    if c.isupper():
-        return c.lower()
-    else:
-        return c.upper()
+    letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    upperletter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    lowerletter = "abcdefghijklmnopqrstuvwxyz"
+    
+    if c in upperletter:
+        for i in range(0, 26):
+            if c == upperletter[i]:
+                return letter[i+26]
+            
+    elif c in lowerletter:
+        for i in range(0, 26):
+            if c == lowerletter[i]:
+                return letter[i]
 
 def convertString(string):
-    answer = ""
+    answer = ''
     for i in string:
         answer += convertChar(i)
     return answer

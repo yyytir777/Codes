@@ -2,14 +2,14 @@
 
 def deci2bin(x):
     num = ""
-    while x :
+    while x:
         if (x % 2) == 0:
             num = "0" + num
         else:
             num = "1" + num
             x -= 1
         x /= 2
-    return num
+    return "0b" + num
 
 
 def main():

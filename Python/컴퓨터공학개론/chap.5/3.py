@@ -9,7 +9,7 @@ def isPrime(n):
 
 num = int(input("정수 입력하시오: "))
 
-for i in range(2, num):
+for i in range(2, num+1):
     if isPrime(i):
         print(i, end=" ")
     else:

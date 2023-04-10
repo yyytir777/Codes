@@ -2,12 +2,14 @@
 
 def getRange(low, high):
     while True:
-        num = int(input("숫자를 입력하시오(0에서 23까지 가능) "))
-        if num >= 0 and num <= 23:
-            break
+        num = int(input("숫자를 입력하시오(%d에서 %d까지 가능) " %(low, high)))
+        if num >= low and num <= high:
+            return num
 
 def main():
-    value = getRange(0, 23)
-    print("OK")
+    low = int(input("low 입력하시오 "))
+    high = int(input("high 입력하시오 "))
+    value = getRange(low, high)
+    print("Input value is", value)
 
 main()
