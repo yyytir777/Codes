@@ -1,5 +1,6 @@
 #8번 문제, C135333, 임원재
 
+#7번문제에서의 convertChar(c)
 def convertChar(c):
     letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     upperletter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -16,7 +17,7 @@ def convertChar(c):
                 return letter[i]
 
 def convertString(string):
-    answer = ''
+    answer = ""
     for i in string:
         answer += convertChar(i)
     return answer

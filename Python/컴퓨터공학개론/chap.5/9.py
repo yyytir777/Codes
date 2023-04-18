@@ -13,14 +13,15 @@ def convertChar(c):
             if c == lowerletter[i]:
                 return letter[i]
 
-def convertString(string, reverse = 0):
+
+def convertString(string, reverse = 0): #디폴트 인수 사용
     answer = ""
     for i in string:
         answer += convertChar(i)
     
     if reverse == 0:
         return answer
-    else:
+    else: #reverse == 1일때 거꾸로 출력
         reverse_answer = ""
         for i in answer:
             reverse_answer = i + reverse_answer

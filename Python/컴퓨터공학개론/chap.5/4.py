@@ -3,9 +3,9 @@
 def deci2bin(x):
     num = ""
     while x:
-        if (x % 2) == 0:
+        if (x % 2) == 0: #2로 나눠지면 맨 앞에 0 추가
             num = "0" + num
-        else:
+        else: #2로 나눠지지 않으면 맨 앞에 1 추가
             num = "1" + num
             x -= 1
         x /= 2

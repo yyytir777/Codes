@@ -1,6 +1,6 @@
 #10번 문제, C135333, 임원재
 
-def mySum(*args):
+def mySum(*args): #*args로 튜플의 형태로 받아옴
     sum = 0
     for i in args:
         if i % args[0] == 0:
