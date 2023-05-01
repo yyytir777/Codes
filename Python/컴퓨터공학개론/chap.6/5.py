@@ -11,12 +11,12 @@ def getMean(list1):
 def getDeviation(list1):
     #표준편차 계산
     sum2 = 0
-    for i in range(len(list1)):
-        num2 = avg - int(list1[i])
-        if num2 < 0:
+    for i in list1:
+        num2 = avg - int(i)
+        if num2 < 0: #음수일때 
             num2 = -num2
         sum2 += (num2 ** 2)
-    sum2 = sum2 / (len(list1) - 1)
+    sum2 = sum2 / len(list1)
     return sum2 ** (1/2)
 
 

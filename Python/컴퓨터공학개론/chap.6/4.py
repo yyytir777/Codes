@@ -2,11 +2,11 @@
 
 def reverseList3(lst):
     lst.remove(max(lst))
-    re_lst = lst[::-1]
-
-    for i in range(len(re_lst)):
-        lst[i] = re_lst[i]
+    length = len(lst)
+    for i in range(length // 2):
+        lst[i], lst[length - i - 1] = lst[length - i - 1], lst[i]
     return lst
+    # lst변화 x
 
 def main():
     lst = [20, 60, 40, 10, 50]

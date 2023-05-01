@@ -5,7 +5,6 @@ def getMax(lst):
     for i in lst:
         if max < i:
             max = i
-    
     lst.remove(max)
     return max, lst
 
