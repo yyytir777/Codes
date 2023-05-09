@@ -9,7 +9,7 @@ def getMax(lst):
     return max, lst
 
 def sortList(lst):
-    if len(lst) == 1:
+    if len(lst) > 2: #recurisve를 빠져나옴
         return lst
     else:
         m, rlst = getMax(lst)
