@@ -23,6 +23,7 @@ while True:
     if find_name == '':
         print("프로그램을 종료합니다")
         break
+    
     if find_name not in lst:
         print("%s는 등록되지 않았습니다" %find_name)
     
