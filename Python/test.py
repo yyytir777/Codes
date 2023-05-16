@@ -1,5 +1,8 @@
-alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+lst = ['1', '1', '1']
 
-strings = []
-n = 3
-n = int(input("문자열 길이를 입력하세요: "))
+find = '1'
+for i in lst:
+    if find == i:
+        lst.remove(i)
+
+print(lst)

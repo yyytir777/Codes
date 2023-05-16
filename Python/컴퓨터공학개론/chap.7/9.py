@@ -28,8 +28,8 @@ while True:
         dictionary[name] = [tel] #정상적으로 추가
 
 print()
-print("중복되지 않은 사람 수 : %d"  %len(name_set))
-print("중복되지 않은 전화번호 수 : %d" %len(tel_set))
+print(f"중복되지 않은 사람 수 : {len(name_set)}")
+print(f"중복되지 않은 전화번호 수 : {len(tel_set)}")
 print()
 
 while True:
@@ -55,13 +55,20 @@ while True:
         
         #전화번호 리스트 안에 전화번호가 있다면 리스트 안에서 삭제, 만약 리스트가 빈다면 해당 항목 상제
         for k, v in dictionary.items():
-            if find in v:
-                v.remove(find)
-            if v == []:
-                delete_idx += [k]
-        for i in delete_idx:
+            for i in v:
+                if find == i:
+                    dictionary[k].remove(i)
+                    if dictionary[k] == [i]:
+                        dictionary[k] = []
+        
+        del_lst = []
+        for k, v in dictionary.items():
+            if dictionary[k] == []:
+                del_lst += k
+        
+        for i in del_lst:
             del dictionary[i]
-
+        
         #전화번호 리스트의 원소를 tel_set에 추가 --> 중복되지 않은 전화번호 개수 출력
         for v in dictionary.values():
             for i in v:
@@ -70,7 +77,7 @@ while True:
         #만약 원소가 없다면 continue
         if len(modified_tel_set) == 0:
             continue
-        print("중복되지 않는 전화번호의 수 %d" %len(modified_tel_set))
+        print(f"중복되지 않는 전화번호의 수 {len(modified_tel_set)}")
         for i in modified_tel_set:
             print(i, end = " ")
         print()
@@ -91,7 +98,7 @@ while True:
         #만약 원소가 없다면 continue
         if len(modified_name_set) == 0:
             continue
-        print("중복되지 않는 사람의 수 %d" %len(modified_name_set))
+        print(f"중복되지 않는 사람의 수 {len(modified_name_set)}")
         for i in modified_name_set:
             print(i, end = " ")
         print()

@@ -7,4 +7,4 @@ cnt = 0
 for i in string:
     if char == i:
         cnt += 1
-print("\"%s\" 문자의 빈도는 %s 이다" %(char, cnt))
+print(f'\"{char}\" 문자의 빈도는 {cnt}이다')

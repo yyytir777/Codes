@@ -6,7 +6,7 @@ while True:
     if name == "":
         break
     elif name in dictionary:
-        print("%s의 전화번호는 %s" %(name, dictionary[name]))
+        print(f"{name}의 전화번호는 {dictionary[name]}")
         continue
 
 

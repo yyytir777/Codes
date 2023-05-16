@@ -27,9 +27,10 @@ while True:
     elif name not in dictionary: #name에 dictionary가 없을때
         dictionary[name] = tel #정상적으로 추가
 
+print(dictionary)
 print()
-print("중복되지 않은 사람 수 : %d"  %not_dupl_name)
-print("중복되지 않은 전화번호 수 : %d" %not_dupl_tel)
+print(f"중복되지 않은 사람 수 : {not_dupl_name}")
+print(f"중복되지 않은 전화번호 수 : {not_dupl_tel}")
 print()
 
 while True:
@@ -46,7 +47,7 @@ while True:
             if find == v or find in v: #전화번호인지 혹은 리스트 안에 있는지
                 cnt += 1
         if cnt == 0:
-            print("%s는 등록되지 않았습니다" %find)
+            print(f"{find}는 등록되지 않았습니다")
             continue
 
         for k, v in dictionary.items():
@@ -61,7 +62,7 @@ while True:
     #이름일때
     else:
         if find not in dictionary:
-            print("%s는 등록되지 않았습니다" %find)
+            print(f"{find}는 등록되지 않았습니다")
             continue
         
         for k, v in dictionary.items():

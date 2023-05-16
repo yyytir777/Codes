@@ -14,10 +14,13 @@ for i in range(26**length):
     string = ''
     for j in range(length, 0, -1):
         if j == 1:
+            #i를 26으로 나눈 나머지
             string += alphabet[i % 26]
         else:
+            #j가 증가할때마다 i를 26의 j-1제곱으로 나눠 자릿수를 설정하고,
+            #이를 26으로 나눈 나머지를 사용하여 'a'~'z'를 순회하여 string에 더하도록 함
             string += alphabet[i // (26 ** (j-1)) % 26]
     if is_palindrome(string):
         count += 1
 
-print("전체 가능한 소문자 알파벳 문자열 %d개 중 회문의 개수는 %d개입니다." %(26**length, count))
+print(f"전체 가능한 소문자 알파벳 문자열 {26**length}개 중 회문의 개수는 {count}개입니다.")
