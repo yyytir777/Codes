@@ -27,7 +27,6 @@ while True:
     elif name not in dictionary: #name에 dictionary가 없을때
         dictionary[name] = tel #정상적으로 추가
 
-print(dictionary)
 print()
 print(f"중복되지 않은 사람 수 : {not_dupl_name}")
 print(f"중복되지 않은 전화번호 수 : {not_dupl_tel}")
