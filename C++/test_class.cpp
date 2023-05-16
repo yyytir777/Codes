@@ -5,7 +5,7 @@ class A{
 private:
     int floor;
     
-public:`
+public:
     A();
 
     A(int s){

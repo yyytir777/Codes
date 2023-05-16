@@ -15,4 +15,5 @@ while True:
         if tel != "":
             dictionary[name] = tel
             break
+        
 print("프로그램을 종료합니다")

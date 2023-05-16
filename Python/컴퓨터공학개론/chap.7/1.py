@@ -19,11 +19,13 @@ while True:
             print("올바른 생년월일입니다.")
         else:
             print("올바르지 않은 생년월일입니다.")
+
     elif m in day30:
         if 1 <= d <= 30:
             print("올바른 생년월일입니다.")
         else:
             print("올바르지 않은 생년월일입니다.")
+
     elif m in day28or29:
         if 1 <= d <= 29 and (y % 4 == 0 and y % 100 != 0) or y % 400 == 0:
             print("올바른 생년월일입니다.")
@@ -31,5 +33,6 @@ while True:
             print("올바른 생년월일입니다.")
         else:
             print("올바르지 않은 생년월일입니다.")
+            
     else:
         print("올바르지 않은 생년월일입니다.")
