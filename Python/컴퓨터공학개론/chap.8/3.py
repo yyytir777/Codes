@@ -11,7 +11,7 @@ class Point:
         return Point(x1, y1)
 
     def __str__(self):
-        return "(%d, %d)" %(self.__x, self.__y)
+        return f"({self.__x}, {self.__y})"
     
 def main():
     a = Point()
