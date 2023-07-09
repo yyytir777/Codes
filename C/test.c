@@ -1,34 +1,13 @@
 #include <stdio.h>
 
-void MaxAndMix(int **MaxPtr, int **MinPtr, int *arr){
-    int *max, *min;
-
-    max = min = &arr[0];
-    for(int i = 0; i < 5; i++){
-        if(*max < arr[i]){
-            max = &arr[i];
-        }
-        else if(*min > arr[i]){
-            min = &arr[i];
-        }
-    }
-
-    *MaxPtr = max;
-    *MinPtr = min;
-}
 
 int main(){
-    int *maxPtr;
-    int *minPtr;
-    int arr[5];
+    int x1 = 2;
+    int x2 = 2;
 
-    for(int i = 0; i < 5; i++){
-        scanf("%d", &arr[i]);
-    }
+    int result1 = (++x1) * 2;
+    int result2 = (x2++) * 2;
 
-    MaxAndMix(&maxPtr, &minPtr, arr);
-
-    printf("%d %d\n", *maxPtr, *minPtr);
-
-    return 0;
+    printf("result1 : %d\nresult2 : %d\n", result1, result2);
+    printf("x1 : %d\nx2 : %d\n", x1, x2);
 }
