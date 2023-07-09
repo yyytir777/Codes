@@ -15,7 +15,8 @@ long long fib(long long n){
 }
 
 int main(){
-    cout << fib(6) << '\n';
+    cout << fib(4) << '\n';
     cout << cnt << '\n';
 
-} 
+
+}

@@ -8,10 +8,10 @@ class Employee:
         self.__SN = Employee.SN
         self.__name = name
         self.__salary = salary
-        Employee.employeeList.append(f'SN : {self.__SN} 이름 : {self.__name} 월급 : {self.__salary}')
+        Employee.employeeList.append(self)
     
-    def __List__(self):
-        return Employee.employeeList
+    def __str__(self):
+        return f'SN : {self.__SN} 이름 : {self.__name} 월급 : {self.__salary}'
 
 def main():
     Employee("사장", 1200)

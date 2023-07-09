@@ -11,7 +11,7 @@ class Dog:
 
     def __str__(self):
         all_trick = " ".join(self.__tirck_lst)
-        return "%s %s는 %s를 할 수 있습니다" %(self.__kind, self.__name, all_trick)
+        return f"{self.__kind} {self.__name}는 {all_trick}를 할 수 있습니다"
 
 def main():
     a = Dog('월시코기', '바둑이')

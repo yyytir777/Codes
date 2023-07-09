@@ -2,7 +2,7 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
-using namespace std; // ������ �߻�ȭ�� Ŭ����
+using namespace std;
 
 
 class Player{

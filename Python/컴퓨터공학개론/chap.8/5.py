@@ -9,7 +9,7 @@ class Employee:
         self.__salary = salary
     
     def __str__(self):
-        return "SN : %d 이름 : %s 월급 : %d" %(self.__SN, self.__name, self.__salary)
+        return f"SN : {self.__SN} 이름 : {self.__name} 월급 : {self.__salary}"
 
 def main():
     a = Employee("사장", 1200)

@@ -8,17 +8,16 @@ class Rectangle:
         self.__h = h
     
     def calArea(self):
-        area = self.__h * self.__w
-        print(area)
+        print(self.__h * self.__w)
     
     def __str__(self):
-        return "(%d,%d) %d,%d" %(self.__x, self.__y, self.__w, self.__h)
+        return f"({self.__x},{self.__y}) {self.__w},{self.__h}"
 
 def main():
     box1 = Rectangle(0, 0, 100, 100)
     box2 = Rectangle(10, 10, 200, 200)
-    print("box: ", box1)
-    print("box: ", box2)
+    print("box:", box1)
+    print("box:", box2)
     box1.calArea()
     box2.calArea()
 

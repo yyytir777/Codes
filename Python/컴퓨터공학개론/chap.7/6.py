@@ -2,11 +2,11 @@
 
 dictionary = dict()
 while True:
-    name = input("이름?")
+    name = input("이름? ")
     if name == "":
         break
     elif name in dictionary:
-        print(f"{name}의 전화번호는 {dictionary[name]}")
+        print("%s의 전화번호는 %s" %(name, dictionary[name]))
         continue
 
 
