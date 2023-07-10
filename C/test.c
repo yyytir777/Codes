@@ -1,13 +1,14 @@
 #include <stdio.h>
+#define PI 3.14
 
+double GetArea(double radius){
+    return PI * radius * radius;
+}
 
 int main(){
-    int x1 = 2;
-    int x2 = 2;
+    double r;
+    printf("원의 반지름을 입력하시오 : ");
+    scanf("%lf", &r);
 
-    int result1 = (++x1) * 2;
-    int result2 = (x2++) * 2;
-
-    printf("result1 : %d\nresult2 : %d\n", result1, result2);
-    printf("x1 : %d\nx2 : %d\n", x1, x2);
+    printf("원의 면적은 %lf입니다.\n", GetArea(r));
 }

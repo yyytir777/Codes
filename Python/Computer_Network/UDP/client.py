@@ -14,4 +14,3 @@ for temp in message_set:
     recv_message, serverAddress = clientSocket.recvfrom(2048)
     print(recv_message.decode())
     clientSocket.close()
-  
