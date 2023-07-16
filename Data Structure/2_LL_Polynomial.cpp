@@ -1,4 +1,4 @@
-#include <iostream>
+#include<iostream>
 using namespace std;
 
 class Polynomial
@@ -10,7 +10,7 @@ private:
         float coef; //계수
         int exp; //지수
         Node* link; //다음 노드를 가리킬 포인터
-        Node(float c, int e = 0) { coef = c; exp = e; } //Node 생성자
+        Node(float c, int e = 0) { coef = c; exp = e; link = NULL; } //Node 생성자
     };
     Node* first;
 public:
@@ -44,7 +44,7 @@ void Polynomial::Get_Polynomial()
 void Polynomial::Insert(float c, int e)
 {
     Node* tmp = first; //각 노드를 돌며 계수가 중복된 항을 찾을 Node 포인터
-    while (tmp) //tmp가 마지막 노드의 link인 NULL에 도달하면 반복 종료
+    while (tmp != NULL) //tmp가 마지막 노드의 link인 NULL에 도달하면 반복 종료
     {
         if (e == tmp->exp) //생성할 노드의 지수와 같은 지수를 갖는 항이 존재할 경우
         {
@@ -75,19 +75,21 @@ void Polynomial::Insert(float c, int e)
     tmp = first; //삽입될 적절한 위치의 다음 노드를 찾을 Node 포인터
     Node* prev = NULL; //삽입될 적절한 위치의 직전 노드를 찾을 Node 포인터
 
-    while (1) //아래 조건문에 의해 중단되기 전까지 무한반복
+    while (tmp != NULL) //다음 노드가 NULL에 도달할 때까지 반복
     {
+        if (e > tmp->exp) //삽입될 위치를 찾은 경우
+            break;
+
         prev = tmp; //다음 노드를 가리킴
         tmp = tmp->link; //다음 노드를 가리킴
-
-        if (!tmp) //LL의 맨 끝에 도달한 경우
-            break; //반복 종료
-        else if (prev->exp > e  && e > tmp->exp) //prev와 tmp 사이가 삽입될 적절한 위치인 경우
-            break; //반복 종료
     }
 
     node->link = tmp; //생성된 노드가 tmp를 가리킴 (삽입될 위치가 맨 끝인 경우 NULL을 가리킴)
-    prev->link = node; //prev가 생성된 노드를 가리킴
+
+    if (prev) //삽입될 위치가 첫 번째 노드가 아닌 경우
+        prev->link = node; //prev가 생성된 노드를 가리킴
+    else //삽입될 위치가 첫 번째 노드인 경우
+        first = node; //first가 생성된 노드를 가리킴
 }
 
 Polynomial Polynomial::operator +(const Polynomial& b)
@@ -96,28 +98,8 @@ Polynomial Polynomial::operator +(const Polynomial& b)
     Node* ai = this->first; //첫 번째 다항식의 노드를 가리킬 포인터
     Node* bi = b.first; //두 번째 다항식의 노드를 가리킬 포인터
     
-    while (1) //아래 조건문에 의해 중단되기 전까지 무한반복
+    while (ai != NULL && bi != NULL) //ai와 bi 둘 중 하나라도 NULL에 도달하면 반복 종료
     {
-        if (!ai) //ai가 NULL인 경우 (다항식 a에 더 이상 계산할 항이 없는 경우)
-        {
-            while(bi) //bi가 NULL에 도달하면 반복 종료 (다항식 b에도 더 이상 계산할 항이 없을 때)
-            {
-                result.Insert(bi->coef, bi->exp); //bi가 가리키는 항을 그래도 result에 추가
-                bi = bi->link; //다음 항을 가리킴
-            }
-            break; //반복 종료
-        }
-        else if (!bi) //bi가 NULL인 경우 (다항식 b에 더 이상 계산할 항이 없는 경우)
-        {
-            while(ai) //ai가 NULL에 도달하면 반복 종료 (다항식 a에도 더 이상 계산할 항이 없을 때)
-            {
-                result.Insert(ai->coef, ai->exp); //ai가 가리키는 항을 그래도 result에 추가
-                ai = ai->link; //다음 항을 가리킴
-            }
-            break; //반복 종료
-        }
-
-
         if (ai->exp > bi->exp) //ai가 가리키는 항의 지수가 더 큰 경우
         {
             result.Insert(ai->coef, ai->exp); //ai가 가리키는 항을 그래도 result에 추가
@@ -130,13 +112,25 @@ Polynomial Polynomial::operator +(const Polynomial& b)
         }
         else //ai와 bi가 가리키는 두 항의 지수가 같은 경우
         {
-            if (ai->coef + bi->coef) //두 항의 계수의 합이 0이 아닌 경우
+            if (ai->coef + bi->coef != 0) //두 항의 계수의 합이 0이 아닌 경우
                 result.Insert(ai->coef + bi->coef, ai->exp); //두 항의 계수의 합, 두 항과 같은 지수를 같는 항을 result에 추가
             
             ai = ai->link; //다음 항을 가리킴
             bi = bi->link; //다음 항을 가리킴
-            
         }
+    }
+
+    // a나 b 중 하나의 다항식이 더 이상 계산할 항이 없는 경우 남은 항들을 result에 추가합니다.
+    while (ai != NULL)
+    {
+        result.Insert(ai->coef, ai->exp);
+        ai = ai->link;
+    }
+
+    while (bi != NULL)
+    {
+        result.Insert(bi->coef, bi->exp);
+        bi = bi->link;
     }
 
     return result; //덧셈이 완료된 다항식을 return
@@ -148,28 +142,8 @@ Polynomial Polynomial::operator -(const Polynomial& b)
     Node* ai = this->first; //첫 번째 다항식의 노드를 가리킬 포인터
     Node* bi = b.first; //두 번째 다항식의 노드를 가리킬 포인터
     
-    while (1) //아래 조건문에 의해 중단되기 전까지 무한반복
+    while (ai != NULL && bi != NULL) //ai와 bi 둘 중 하나라도 NULL에 도달하면 반복 종료
     {
-        if (!ai) //ai가 NULL인 경우 (다항식 a에 더 이상 계산할 항이 없는 경우)
-        {
-            while(bi) //bi가 NULL에 도달하면 반복 종료 (다항식 b에도 더 이상 계산할 항이 없을 때)
-            {
-                result.Insert(-(bi->coef), bi->exp); //bi가 가리키는 항의 계수의 부호를 바꾼 후 result에 추가
-                bi = bi->link; //다음 항을 가리킴
-            }
-            break; //반복 종료
-        }
-        else if (!bi) //bi가 NULL인 경우 (다항식 b에 더 이상 계산할 항이 없는 경우)
-        {
-            while(ai) //ai가 NULL에 도달하면 반복 종료 (다항식 a에도 더 이상 계산할 항이 없을 때)
-            {
-                result.Insert(ai->coef, ai->exp); //ai가 가리키는 항을 그래도 result에 추가
-                ai = ai->link; //다음 항을 가리킴
-            }
-            break; //반복 종료
-        }
-
-
         if (ai->exp > bi->exp) //ai가 가리키는 항의 지수가 더 큰 경우
         {
             result.Insert(ai->coef, ai->exp); //ai가 가리키는 항을 그래도 result에 추가
@@ -182,13 +156,25 @@ Polynomial Polynomial::operator -(const Polynomial& b)
         }
         else //ai와 bi가 가리키는 두 항의 지수가 같은 경우
         {
-            if (ai->coef - bi->coef) //두 항의 계수의 차가 0이 아닌 경우
+            if (ai->coef - bi->coef != 0) //두 항의 계수의 차가 0이 아닌 경우
                 result.Insert(ai->coef - bi->coef, ai->exp); //두 항의 계수의 차, 두 항과 같은 지수를 같는 항을 result에 추가
             
             ai = ai->link; //다음 항을 가리킴
             bi = bi->link; //다음 항을 가리킴
-            
         }
+    }
+
+    // a나 b 중 하나의 다항식이 더 이상 계산할 항이 없는 경우 남은 항들을 result에 추가합니다.
+    while (ai != NULL)
+    {
+        result.Insert(ai->coef, ai->exp);
+        ai = ai->link;
+    }
+
+    while (bi != NULL)
+    {
+        result.Insert(-(bi->coef), bi->exp);
+        bi = bi->link;
     }
 
     return result; //뺄셈이 완료된 다항식을 return
@@ -198,7 +184,7 @@ void Polynomial::Print()
 {
     if (!first) //LL이 빈 경우
     {
-        cout << "Empty Linkes List" << endl; //경고문 출력
+        cout << "Empty Linked List" << endl; //경고문 출력
         return; //함수 종료
     }
 
@@ -211,17 +197,17 @@ void Polynomial::Print()
             if (tmp->coef > 0) //계수가 양수일 경우
                 cout << '+'; //'+' 출력
             cout << tmp->coef; //계수(상수)만 출력
-            break; //마지막 항이 출력되었으므로 반복 종료
+        }
+        else //상수항이 아닌 경우
+        {
+            if (tmp->coef > 0) //계수가 양수인 경우
+                cout << '+' << tmp->coef << "x^"; //'+'와 계수 출력
+            else if (tmp->coef < 0) //계수가 음수인 경우
+                cout << tmp->coef << "x^"; //계수만 출력
+            
+            cout << tmp->exp; //지수 출력
         }
 
-        //상수항이 아닌 경우
-
-        if (tmp->coef > 0) //계수가 양수인 경우
-            cout << '+' << tmp->coef << "x^"; //'+'와 계수 출력
-        else if (tmp->coef < 0) //계수가 음수인 경우
-            cout << tmp->coef << "x^"; //계수만 출력
-            
-        cout << tmp->exp; //지수 출력
         tmp = tmp->link; //다음 노드를 가리킴
     }
     cout << endl;
