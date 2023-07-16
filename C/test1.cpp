@@ -1,23 +1,33 @@
-#include <iostream>
-using namespace std;
+# include <stdio.h>
+# define MAX_SIZE 5
 
-int main(){
-    
-    return 0;
-}
+// 버블 정렬
+void bubble_sort(int list[], int n){
+    int i, j, temp;
 
-int knapsack(int capacity, int w[], int v[], int n){
-    int K[n+1][capacity+1];
-
-    for(int i = 0; i <= n; i++){
-        for(int j = 0; j <= capacity; j++){
-            if(i == 0 || j == 0)
-                K[i][j] = 0;
-            else if(w[i-1] <= j)
-                K[i][j] = max(K[i-1][j], v[i-1] + K[i-1][j - w[i-1]]);
-            else
-                K[i][j] = K[i-1][j];
+    for(i=n-1; i>0; i--){
+    // 0 ~ (i-1)까지 반복
+        for(j=0; j<i; j++){
+            // j번째와 j+1번째의 요소가 크기 순이 아니면 교환
+            if(list[j]>list[j+1]){
+            temp = list[j];
+            list[j] = list[j+1];
+            list[j+1] = temp;
+            }
         }
     }
-    return K[n][capacity];
+}
+
+int main(){
+    int i;
+    int n = MAX_SIZE;
+    int list[n] = {7, 4, 5, 1, 3};
+
+  // 버블 정렬 수행
+    bubble_sort(list, n);
+
+  // 정렬 결과 출력
+    for(i=0; i<n; i++){
+        printf("%d\n", list[i]);
+    }
 }
