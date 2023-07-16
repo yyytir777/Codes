@@ -23,7 +23,7 @@ public:
 };
 
 void Polynomial::Get_Polynomial()
-{
+{ 
     float C; //계수를 입력받을 변수
     int E; //지수를 입력받을 변수
     
