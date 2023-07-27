@@ -1,7 +1,12 @@
 #include <stdio.h>
 
 int main(){
-    int arr[4] = {1,2,3,4};
-    printf("%p", arr);
-    printf("%p", &arr[0]);
+    int num = 10;
+    int *ptr1 = &num;
+    int *ptr2 = ptr1;
+
+    (*ptr1)++;
+    (*ptr2)++;
+    printf("%d\n", num);
+    return 0;
 }
