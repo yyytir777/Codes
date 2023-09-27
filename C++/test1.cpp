@@ -14,6 +14,11 @@ int main(){
     else if (year % 4 == 0) check = true;
     else check = false;
 
+
+
+    prompt();
+
+
     cout << check << '\n';
     return 0;
 }
