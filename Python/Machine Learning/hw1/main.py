@@ -1,12 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
+from KNN import KNN
 
 # Iris 데이터셋 불러오기
 iris = load_iris()
 
-X = iris.data[:, :2] # 4 features 중 첫번째, 두번째 feature 사용  # type: ignore
+X = iris.data[:, 1:3] # 4 features 중 첫번째, 두번째 feature 사용  # type: ignore
 y = iris.target # 각 케이스의 실제 값의 인덱스 # type: ignore 
+y_name = iris.target_names #type: ignore ['setosa', 'versicolor', virginica']
 
 x1_min, x1_max = X[:,0].min() - 5, X[:,0].max() + 0.5
 x2_min, x2_max = X[:,0].min() - 5, X[:,0].max() + 0.5
@@ -33,7 +35,7 @@ test_data_X = np.array(test_data_X)
 
 plt.figure(figsize=(8,6))
 # train data를 matplotlib에 scatter (각 target에 대해 색깔을 다르게 설정)
-plt.scatter(train_data_X[:,0], train_data_X[:,1], s = 30,c = train_target_y, cmap=plt.cm.Set1, edgecolors='k')
+plt.scatter(train_data_X[:,0], train_data_X[:,1], c = train_target_y, cmap=plt.cm.Set1, edgecolors='k') # type: ignore
 
 # plt.scatter(test_data_X[:,0], test_data_X[:,1], c = 'blue', cmap=plt.cm.Set1, edgecolors='k')
 plt.xlabel('Sepal length')
@@ -44,12 +46,22 @@ plt.ylim(x2_min, x2_max)
 
 #plt.show()
 
+train_data_X = list(train_data_X)
+train_target_y = list(train_target_y)
 
-model = KNN(k=3, train_data_X, train_target_y) # KNN class 생성
+model = KNN(11, train_data_X, train_target_y) # KNN class 생성 <-- train할 데이터 넣어줌
 
-#train_data를 순회하며 Calculate_distance()하고 해당 값을 리스트에 저장 -> 리스트 오름차순 정렬
-for _ in range(len(train_data_X)):
+#test 값을 넣어줄 때마다 output 계산해야함 & 계산된 output과 실제 output 비교 using k = 3, 5, 7
 
+i = 0
+for test_data in test_data_X:
+    # 각각의 train_data와의 거리 계산을 distance_list에 append
+    distnace_list = model.Calculate_distance(test_data)
 
-#Obtain K-nearest Neighbor : 리스트에서 k개를 선택하여 target요소가 많은 것을 반환
+    #train data와의 거리를 오름차순으로 정렬하여 k개의 최단거리의 target 인덱스 반환
+    target_list = model.Obtain_KNN(distnace_list)
 
+    predict_target_idx = max(target_list, key=target_list.count)
+
+    print('Test Data Index : %d     Computed class : %s     True class : %s' %(i, y_name[predict_target_idx], y_name[test_target_y[i]]))
+    i += 1
