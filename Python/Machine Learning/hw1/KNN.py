@@ -35,7 +35,7 @@ class KNN:
         return result
     
 
-    # majority vote (return value from 0 to 1)
+    # majority vote
     def Obtain_majority_vote(self, lst):
         result = max(lst, key=lst.count)
         return result

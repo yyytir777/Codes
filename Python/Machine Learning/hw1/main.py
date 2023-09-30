@@ -50,7 +50,7 @@ plt.ylim(x2_min, x2_max)
 train_data_X = list(train_data_X)
 train_target_y = list(train_target_y)
 
-model = KNN(7, train_data_X, train_target_y) # KNN class 생성 <-- train할 데이터 넣어줌
+model = KNN(5, train_data_X, train_target_y) # KNN class 생성 <-- train할 데이터 넣어줌
 
 #test 값을 넣어줄 때마다 output 계산해야함 & 계산된 output과 실제 output 비교 using k = 3, 5, 7
 
@@ -64,6 +64,6 @@ for test_data in test_data_X:
 
     predict_target_idx = model.Obtain_majority_vote(target_list)
 
-    print('Test Data Index : %d     Computed class : %s     True class : %s' %(i, y_name[predict_target_idx], y_name[test_target_y[i]]))
+    print('Test Data Index : %d,     Computed class : %s,     True class : %s' %(i, y_name[predict_target_idx], y_name[test_target_y[i]]))
     i += 1
 
