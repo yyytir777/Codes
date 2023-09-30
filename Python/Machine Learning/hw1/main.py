@@ -6,6 +6,7 @@ from KNN import KNN
 # Iris 데이터셋 불러오기
 iris = load_iris()
 
+# [(꽃받침 길이, 꽃받침 너비, 꽃잎 길이, 꽃잎 너비)]
 X = iris.data[:, 1:3] # 4 features 중 첫번째, 두번째 feature 사용  # type: ignore
 y = iris.target # 각 케이스의 실제 값의 인덱스 # type: ignore 
 y_name = iris.target_names #type: ignore ['setosa', 'versicolor', virginica']
@@ -49,7 +50,7 @@ plt.ylim(x2_min, x2_max)
 train_data_X = list(train_data_X)
 train_target_y = list(train_target_y)
 
-model = KNN(11, train_data_X, train_target_y) # KNN class 생성 <-- train할 데이터 넣어줌
+model = KNN(7, train_data_X, train_target_y) # KNN class 생성 <-- train할 데이터 넣어줌
 
 #test 값을 넣어줄 때마다 output 계산해야함 & 계산된 output과 실제 output 비교 using k = 3, 5, 7
 
@@ -61,7 +62,8 @@ for test_data in test_data_X:
     #train data와의 거리를 오름차순으로 정렬하여 k개의 최단거리의 target 인덱스 반환
     target_list = model.Obtain_KNN(distnace_list)
 
-    predict_target_idx = max(target_list, key=target_list.count)
+    predict_target_idx = model.Obtain_majority_vote(target_list)
 
     print('Test Data Index : %d     Computed class : %s     True class : %s' %(i, y_name[predict_target_idx], y_name[test_target_y[i]]))
     i += 1
+
