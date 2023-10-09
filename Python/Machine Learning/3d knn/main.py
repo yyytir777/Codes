@@ -2,12 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
 from KNN import KNN
+from mpl_toolkits.mplot3d import Axes3D
 
 # Iris 데이터셋 불러오기
 iris = load_iris()
 
 # [(꽃받침 길이, 꽃받침 너비, 꽃잎 길이, 꽃잎 너비)]
-X = iris.data[:, [0,2]] # 4 features 중 첫번째, 두번째 feature 사용  # type: ignore
+X = iris.data[:, [0,1,2]] # 4 features 중 첫번째, 두번째 feature 사용  # type: ignore
 y = iris.target # 각 케이스의 실제 값의 인덱스 # type: ignore 
 y_name = iris.target_names #type: ignore ['setosa', 'versicolor', virginica']
 
@@ -34,18 +35,20 @@ test_data_X = np.array(test_data_X)
 x1_min, x1_max = X[:,0].min() - 5, X[:,0].max() + 0.5
 x2_min, x2_max = X[:,0].min() - 5, X[:,0].max() + 0.5
 
-plt.figure(figsize=(8,6))
+fig = plt.figure(figsize=(8,6))
+
+ax = fig.add_subplot(projection='3d')
 # train data를 matplotlib에 scatter (각 target에 대해 색깔을 다르게 설정)
-plt.scatter(train_data_X[:,0], train_data_X[:,1], c = train_target_y, cmap=plt.cm.Set1, edgecolors='k') # type: ignore
+ax.scatter(train_data_X[:,0], train_data_X[:,1], train_data_X[:,2], c = train_target_y, cmap=plt.cm.Set1, edgecolors='k') # type: ignore
 
 # test data를 matplotlib에 scatter
-plt.scatter(test_data_X[:,0], test_data_X[:,1], edgecolors='k') # type: ignore
+ax.scatter(test_data_X[:,0], test_data_X[:,1], test_data_X[:,2], edgecolors='k') # type: ignore
 
-plt.xlabel('Sepal length')
-plt.ylabel('Sepal width')
+#plt.xlabel('Sepal length')
+#plt.ylabel('Sepal width')
 
-plt.xlim(x1_min, x1_max)
-plt.ylim(x2_min, x2_max)
+#plt.xlim(x1_min, x1_max) 
+#plt.ylim(x2_min, x2_max)
 
 plt.show()
 
