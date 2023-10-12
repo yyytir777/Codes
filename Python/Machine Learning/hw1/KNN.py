@@ -12,11 +12,11 @@ class KNN:
         result = []
 
         #test data 하나와, 여러개의 train data의 거리를 계산하여 result 리스트에 거리 추가
-        for train_x, train_y in self.__features:
+        for train_w, train_x, train_y, train_z in self.__features:
             tmp = 0
 
             # numpy에서 sqrt를 반환하는 함수
-            tmp = np.sqrt( (train_x - X[0])**2 + (train_y - X[1])**2 )
+            tmp = np.sqrt( (train_w - X[0])**2 + (train_x - X[1])**2 + (train_y - X[2])**2 + (train_z - X[3])**2)
             result.append(tmp)
 
         # result와 target끼리 묶어 리스트 생성 [[result, target] .... ... ... ...]
