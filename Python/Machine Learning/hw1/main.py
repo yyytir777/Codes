@@ -7,7 +7,11 @@ from KNN import KNN
 iris = load_iris()
 
 # [(꽃받침 길이, 꽃받침 너비, 꽃잎 길이, 꽃잎 너비)]
+<<<<<<< HEAD
 X = iris.data[:, :]# type: ignore
+=======
+X = iris.data[:, [0,2]] # 4 features 중 첫번째, 두번째 feature 사용  # type: ignore
+>>>>>>> 33b784913f47c0378ddd17584a82b1c0c6d933e5
 y = iris.target # 각 케이스의 실제 값의 인덱스 # type: ignore 
 y_name = iris.target_names #type: ignore ['setosa', 'versicolor', virginica']
 
@@ -52,9 +56,13 @@ for i in range(0, 150):
 # train_data_X = list(train_data_X)
 # train_target_y = list(train_target_y)
 
+<<<<<<< HEAD
 for i in range(3):
     k = 2 * i + 3
     model = KNN(k, train_data_X, train_target_y) # KNN class 생성 <-- train할 데이터 넣어줌
+=======
+model = KNN(7, train_data_X, train_target_y) # KNN class 생성 <-- train할 데이터 넣어줌
+>>>>>>> 33b784913f47c0378ddd17584a82b1c0c6d933e5
 
     #test 값을 넣어줄 때마다 output 계산해야함 & 계산된 output과 실제 output 비교 using k = 3, 5, 7
 
