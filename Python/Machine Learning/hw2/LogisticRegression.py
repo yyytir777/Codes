@@ -54,7 +54,7 @@ class LogisticRegression():
             y = self._y_train # (100,10)
 
 
-            # sigmoid(x) h : (100,1)
+            # sigmoid(x) h : (100,10)
             h = self.sigmoid_f(x)
 
             # cost(h) cost : (100,10)
@@ -73,10 +73,22 @@ class LogisticRegression():
 
         x = np.dot(self._x_test, self._w) # (100, 785) x (785, 10) = (100, 10)
         h = self.sigmoid_f(x)
+        # h : (100, 10)
         print("h : ", h)
-        row_max = np.amax(h, axis=1)
+        
+        row_max_list = list()
         for i in range(self._n):
-            print("test[%d] is %d" %(i, row_max[i]))
+            row_max = np.max(h[i,:])
+
+            for j in range(10):
+                if row_max == np.max(h[i,j]):
+                    max_idx = j
+            
+            # row_max_list = [[row의 최댓값, 최댓값이 가지는 target_class]] <- index는 row에 대응
+            row_max_list.append([row_max, max_idx])
+
+        for i in range(self._n):
+            print("test[%d] is %d" %(i, row_max_list[i][1]))
 
     def run(self):
         self.learn()
