@@ -14,13 +14,14 @@ import matplotlib.pyplot as plt
 (x_train, y_train), (x_test, y_test) = load_mnist(flatten=True, normalize=True)
 
 # KNN 실행
-#clf1 = KNN(x_train, y_train, x_test, y_test, k = 5)
-#clf1.run()
+clf1 = KNN(x_train, y_train, x_test, y_test, k = 1)
+clf1.run()
 
 # clf2 = LogisticRegression(0.005, 1000, x_train.astype('float32')/255.0,\
             #            y_train, x_test.astype('float32')/255.0, y_test)
 # clf2.run()
 
+"""
 k_list = list()
 accuracy_list = list()
 for i in range(3, 51, 2):
@@ -30,3 +31,4 @@ for i in range(3, 51, 2):
 
 print(k_list)
 print(accuracy_list)
+"""
