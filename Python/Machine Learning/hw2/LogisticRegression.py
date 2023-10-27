@@ -62,7 +62,6 @@ class LogisticRegression():
 
             print("epoch : %d" %(i))
             print("cost : ", cost)
-            print()
 
             # gradient : (785,10)
             gradient = self.gradient_descent(self._x_train, y, h)
@@ -74,7 +73,6 @@ class LogisticRegression():
         x = np.dot(self._x_test, self._w) # (100, 785) x (785, 10) = (100, 10)
         h = self.sigmoid_f(x)
         # h : (100, 10)
-        print("h : ", h)
         
         row_max_list = list()
         for i in range(self._n):
@@ -87,8 +85,15 @@ class LogisticRegression():
             # row_max_list = [[row의 최댓값, 최댓값이 가지는 target_class]] <- index는 row에 대응
             row_max_list.append([row_max, max_idx])
 
+        print(row_max_list)
+
+        cnt = 0
         for i in range(self._n):
             print("test[%d] is %d" %(i, row_max_list[i][1]))
+            if 1 == self._y_test[i][row_max_list[i][1]]:
+                cnt += 1
+        
+        print("accuracy : %0.3f" %(cnt / self._n))
 
     def run(self):
         self.learn()
