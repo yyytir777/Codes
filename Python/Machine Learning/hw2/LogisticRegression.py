@@ -8,13 +8,11 @@ class LogisticRegression():
         self._epoch = epoch
         self._x_train = x_train.reshape(60000, 28 * 28)
         self._x_test = x_test.reshape(10000, 28 * 28)
-        self._n = 1000
+        self._n = 1000 #데이터 개수
+        # 0으로 초기화
         self._y_train = np.zeros(shape=(self._n, 10))
         self._y_test = np.zeros(shape=(self._n, 10))
         self._w = np.zeros((len(self._x_train[0]) + 1)).reshape(785,1)
-        self._result = np.ones(shape=(self._n, 10))
-        self._x = list()
-        self._y = list()
         self._y_test_for_compare = y_test
 
         # 사용할 데이터 크기로 자르기
@@ -53,12 +51,10 @@ class LogisticRegression():
     # epoch번 반복하여 self._w update
     def learn(self):
         self._cost_list = np.empty((0,10))
-        for i in range(self._epoch):
+        for _ in range(self._epoch):
 
             x = np.dot(self._x_train, self._w) # -> (100,785) x (785,1) = (100,1)
-            print("w : ", self._w.shape)
             y = self._y_train # (100,10)
-
 
             # sigmoid(x) h : (100,1)
             h = self.sigmoid_f(x)
@@ -66,11 +62,7 @@ class LogisticRegression():
             # cost(h) cost : (10,)
             cost = self.cost_f(y, h)
             cost = np.array(cost).reshape(1,10)
-            print("cost : ", cost.shape)
             self._cost_list = np.concatenate([self._cost_list, cost])
-
-            print("epoch : %d" %(i))
-            print("cost : ", cost)
 
             # gradient : (785,1)
             gradient = self.gradient_descent(self._x_train, y, h)
@@ -89,16 +81,19 @@ class LogisticRegression():
             # 해당 데이터에서 0-9까지 target class에 대한 sigmoid값의 최대값의 인덱스 반환
             target_class = np.argmax(row)
             # 반환한 인덱스 값은 predict한 target class로 사용
-            row_max_list.append([target_class, np.argmax(row)])
+            row_max_list.append(target_class)
         
         cnt = 0
         for i in range(self._n):
-            print("test[%d] is %d" %(i, row_max_list[i][1]),\
-                    "and real value is %d" %(self._y_test_for_compare[i]))
-            if row_max_list[i][1] == self._y_test_for_compare[i]:
+            if row_max_list[i] == self._y_test_for_compare[i]:
                 cnt += 1
         print("accuracy : %0.3f" %(cnt / self._n))
 
+    def getCost(self):
+        for i in range(self._epoch):
+            print("epoch: %d cost : " %(i), self._cost_list[i])
+
     def run(self):
         self.learn()
+        self.getCost()
         self.predict()
