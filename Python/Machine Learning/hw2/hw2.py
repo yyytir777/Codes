@@ -17,18 +17,16 @@ import matplotlib.pyplot as plt
 # clf1 = KNN(x_train, y_train, x_test, y_test, k = 1)
 # clf1.run()
 
-clf2 = LogisticRegression(0.00001, 200, x_train.astype('float32')/255.0,\
-                        y_train, x_test.astype('float32')/255.0, y_test)
+clf2 = LogisticRegression(0.0001, 100, x_train.astype('float32'),\
+                        y_train, x_test.astype('float32'), y_test)
 clf2.run()
 
-"""
-k_list = list()
-accuracy_list = list()
-for i in range(3, 51, 2):
-    knn = KNN(x_train, y_train, x_test, y_test, k = i)
-    k_list.append(i)
-    accuracy_list.append(knn.run())
+epoch, cost_list = clf2.getCostList()
+x = [i for i in range(epoch)]
 
-print(k_list)
-print(accuracy_list)
-"""
+for i in range(10):
+    plt.plot(x, cost_list[:,i], label=f'Epoch {i + 1}')
+
+plt.xlabel('Epoch')
+plt.ylabel('Cost')
+plt.show()
