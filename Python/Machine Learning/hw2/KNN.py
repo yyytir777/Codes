@@ -16,13 +16,15 @@ class KNN():
 
     def run(self):
         # Calculate Distance
-        self._start = time()
+        start = time()
         # self._x_test에 대한 원소 순회
         for i in range(self._n):
             # 각 원소에 대한 train_data와의 거리 집합을 리턴하여 self._result에 저장
             self._result += [self.Calculate_Distance(self._x_test[i])]
         
-        self._end = time()
+        end = time()
+        self._time = end - start
+        
         # Obatin_KNN
         self.Obtain_KNN()
 
@@ -31,7 +33,6 @@ class KNN():
         # self.Obtain_Weighted_Majority_Vote()
         
         self.print()
-        return self._accuracy
 
 
     def Calculate_Distance(self, x_test_data):
@@ -108,13 +109,13 @@ class KNN():
 
 
     def print(self):
-        #print("output : \t target class : ")
+        print("output : \t target class : ")
         cnt = 0
         for i in range(self._n):
-        #    print(self._test_output[i], '\t\t', self._y_test[i])
+            print(self._test_output[i], '\t\t', self._y_test[i])
             if self._test_output[i] == self._y_test[i]:
                 cnt += 1
-        
-        #print('inference : %0.3f sec' %(self._end - self._start))
-        print("accuracy = ", round(float(cnt / self._n), 4))
-        self._accuracy = round(float(cnt / self._n), 4)
+
+        accuracy = round(float(cnt / self._n), 4)
+        print("fit time = ", round(float(self._time), 4))
+        print("accuracy = ", accuracy)
