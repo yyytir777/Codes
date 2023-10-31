@@ -40,9 +40,8 @@ class KNN():
         test_result = list()
         # self._x_train에 대한 원소 순회
         for j in range(len(self._x_train)):
-            distance = 0
             # 다음과 같은 방식으로 두 점 사이의 거리를 구함
-            distance += np.sqrt(np.sum((self._x_train[j] - x_test_data) ** 2))
+            distance = np.sqrt(np.sum((self._x_train[j] - x_test_data) ** 2))
             # [거리, train_data의 target class값]
             test_result.append([distance, self._y_train[j]])
         

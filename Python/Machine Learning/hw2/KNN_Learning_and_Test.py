@@ -12,3 +12,4 @@ from KNN import KNN
 
 # KNN 실행
 clf1 = KNN(x_train / 255, y_train, x_test / 255, y_test, k = 3)
+clf1.run()
