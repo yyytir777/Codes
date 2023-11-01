@@ -41,13 +41,15 @@ class KNN():
         # self._x_train에 대한 원소 순회
         for j in range(len(self._x_train)):
             # 다음과 같은 방식으로 두 점 사이의 거리를 구함
-            distance = np.sqrt(np.sum((self._x_train[j] - x_test_data) ** 2))
+            distance = np.linalg.norm(x_test_data - self._x_train[j])
+            # distance = np.sqrt(np.sum((self._x_train[j] - x_test_data) ** 2))
             # [거리, train_data의 target class값]
             test_result.append([distance, self._y_train[j]])
         
         # k개의 최단거리를 구하기 위해 정렬 진행
         test_result.sort()
         # 정렬된 test_result return
+        
         return test_result
 
 
@@ -116,5 +118,6 @@ class KNN():
                 cnt += 1
 
         accuracy = round(float(cnt / self._n), 4)
-        print("fit time = ", round(float(self._time), 4))
+        inference = round(float(self._time), 4)
+        print("fit time = ", inference)
         print("accuracy = ", accuracy)

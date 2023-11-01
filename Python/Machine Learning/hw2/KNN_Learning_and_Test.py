@@ -11,7 +11,7 @@ from KNN import KNN
 (x_train, y_train), (x_test, y_test) = load_mnist(flatten=True, normalize=False)
 
 # KNN 실행
-clf1 = KNN(x_train, y_train, x_test, y_test, k = 15)
+clf1 = KNN(x_train/255, y_train, x_test/255, y_test, k = 7)
 clf1.run()
 
 # x_train, x_test -> x_train/255, x_test/255와 같이 정규화를
