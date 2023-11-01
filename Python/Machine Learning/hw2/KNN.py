@@ -20,7 +20,7 @@ class KNN():
         # self._x_test에 대한 원소 순회
         for i in range(self._n):
             # 각 원소에 대한 train_data와의 거리 집합을 리턴하여 self._result에 저장
-            self._result += [self.Calculate_Distance(self._x_test[i])]
+            self._result.append(self.Calculate_Distance(self._x_test[i]))
         
         end = time()
         self._time = end - start
