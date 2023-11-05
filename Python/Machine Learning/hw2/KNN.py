@@ -16,13 +16,15 @@ class KNN():
 
     def run(self):
         # Calculate Distance
-        self._start = time()
+        start = time()
         # self._x_test에 대한 원소 순회
         for i in range(self._n):
             # 각 원소에 대한 train_data와의 거리 집합을 리턴하여 self._result에 저장
-            self._result += [self.Calculate_Distance(self._x_test[i])]
+            self._result.append(self.Calculate_Distance(self._x_test[i]))
         
-        self._end = time()
+        end = time()
+        self._time = end - start
+        
         # Obatin_KNN
         self.Obtain_KNN()
 
@@ -31,7 +33,6 @@ class KNN():
         # self.Obtain_Weighted_Majority_Vote()
         
         self.print()
-        return self._accuracy
 
 
     def Calculate_Distance(self, x_test_data):
@@ -39,15 +40,15 @@ class KNN():
         test_result = list()
         # self._x_train에 대한 원소 순회
         for j in range(len(self._x_train)):
-            distance = 0
             # 다음과 같은 방식으로 두 점 사이의 거리를 구함
-            distance += np.sqrt(np.sum((self._x_train[j] - x_test_data) ** 2))
+            distance = np.linalg.norm(x_test_data - self._x_train[j])
             # [거리, train_data의 target class값]
             test_result.append([distance, self._y_train[j]])
         
         # k개의 최단거리를 구하기 위해 정렬 진행
         test_result.sort()
         # 정렬된 test_result return
+        
         return test_result
 
 
@@ -82,39 +83,40 @@ class KNN():
             # Euclidean Distance의 역수를 distance에 저장
             distance = list()
             for j in range(self._k):
-                distance.append([1.0 / (self._result[i][j][0])])
+                distance.append(1.0 / self._result[i][j][0])
             
             # 가중치를 거리 역수의 합으로 나누어 정규화 (0 ~ 1)
+            total_distance = np.sum(distance)
             weighted = list()
-            for j in distance:
-                weighted.append([j / np.sum(distance)])
+            for i in distance:
+                weighted.append(i / total_distance)
+
+            weighted = [d / total_distance for d in distance]
 
             # 각 클래스에 대한 가중치를 계산 (이미 존재하는 클래스에 대해서는 덧셈 연산)
             weighted_classes = dict()
-            weighted_list = list()
             for j in range(self._k):
                 target_class = self._result[i][j][1]
-                if target_class in weighted_list:
+                if target_class in weighted_classes:
                     weighted_classes[target_class] += weighted[j]
                 else:
-                    weighted_list += target_class
                     weighted_classes[target_class] = weighted[j]
 
             # 가중치가 가장 큰 클래스를 선택
-            output = max(weighted_classes)
+            output = max(weighted_classes, key=weighted_classes.get)
             test_output.append(output)
 
         self._test_output = test_output
 
-
     def print(self):
-        #print("output : \t target class : ")
+        print("output : \t target class : ")
         cnt = 0
         for i in range(self._n):
-        #    print(self._test_output[i], '\t\t', self._y_test[i])
+            print(self._test_output[i], '\t\t', self._y_test[i])
             if self._test_output[i] == self._y_test[i]:
                 cnt += 1
-        
-        #print('inference : %0.3f sec' %(self._end - self._start))
-        print("accuracy = ", round(float(cnt / self._n), 4))
-        self._accuracy = round(float(cnt / self._n), 4)
+
+        accuracy = round(float(cnt / self._n), 4)
+        inference = round(float(self._time), 4)
+        print("fit time = ", inference)
+        print("accuracy = ", accuracy)
