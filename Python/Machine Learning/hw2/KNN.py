@@ -42,7 +42,6 @@ class KNN():
         for j in range(len(self._x_train)):
             # 다음과 같은 방식으로 두 점 사이의 거리를 구함
             distance = np.linalg.norm(x_test_data - self._x_train[j])
-            # distance = np.sqrt(np.sum((self._x_train[j] - x_test_data) ** 2))
             # [거리, train_data의 target class값]
             test_result.append([distance, self._y_train[j]])
         
@@ -84,30 +83,30 @@ class KNN():
             # Euclidean Distance의 역수를 distance에 저장
             distance = list()
             for j in range(self._k):
-                distance.append([1.0 / (self._result[i][j][0])])
+                distance.append(1.0 / self._result[i][j][0])
             
             # 가중치를 거리 역수의 합으로 나누어 정규화 (0 ~ 1)
+            total_distance = np.sum(distance)
             weighted = list()
-            for j in distance:
-                weighted.append([j / np.sum(distance)])
+            for i in distance:
+                weighted.append(i / total_distance)
+
+            weighted = [d / total_distance for d in distance]
 
             # 각 클래스에 대한 가중치를 계산 (이미 존재하는 클래스에 대해서는 덧셈 연산)
             weighted_classes = dict()
-            weighted_list = list()
             for j in range(self._k):
                 target_class = self._result[i][j][1]
-                if target_class in weighted_list:
+                if target_class in weighted_classes:
                     weighted_classes[target_class] += weighted[j]
                 else:
-                    weighted_list += target_class
                     weighted_classes[target_class] = weighted[j]
 
             # 가중치가 가장 큰 클래스를 선택
-            output = max(weighted_classes)
+            output = max(weighted_classes, key=weighted_classes.get)
             test_output.append(output)
 
         self._test_output = test_output
-
 
     def print(self):
         print("output : \t target class : ")
