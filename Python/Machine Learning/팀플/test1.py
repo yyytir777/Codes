@@ -1,6 +1,4 @@
 import pandas as pd
-import gensim
-from gensim import corpora
 
 df = pd.read_csv("C:\\Users\\yyyti\\Documents\\Code\\Python\\Machine Learning\\팀플\\twitter_MBTI.csv", encoding='iso-8859-1')
 
