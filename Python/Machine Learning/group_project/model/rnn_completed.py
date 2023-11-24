@@ -4,10 +4,11 @@ import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.layers import LSTM, Embedding, Dense #ignore : 
 from tensorflow.keras.models import Sequential
-import torch
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping
 
 
-with open("Python\\Machine Learning\\group_project\\input\\h_input_data.pkl", "rb") as fr:
+with open("Python\\Machine Learning\\group_project\\input\\input_data.pkl", "rb") as fr:
     input_data = pickle.load(fr)
 
 with open("Python\\Machine Learning\\group_project\\input\\target_class.pkl", "rb") as fr:
@@ -82,17 +83,17 @@ model = Sequential()
 model.add(LSTM(hidden_units))
 model.add(Dense(4, activation='sigmoid'))
 
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])  # Change loss function
-history = model.fit(x_train, y_train, epochs=5, batch_size=50, validation_split=0.2)
+optimizer = Adam(learning_rate = 0.00001)
+early_stopping = EarlyStopping(monitor='val_accuracy', patience=3)
+model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['acc'])  # Change loss function
+history = model.fit(x_train, y_train, epochs=100, batch_size=100, validation_split = 0.2, callbacks=[early_stopping])
 
 # 모델 평가
 model.evaluate(x_test, y_test)
 
 # 모델 예측
 predictions = model.predict(x_test)
-
 print(predictions)
-
 for i in range(len(predictions)):
     for j in range(len(predictions[i])):
         if predictions[i][j] >= 0.5:
@@ -104,16 +105,19 @@ for i in range(len(predictions)):
 # 예측 결과 출력
 cnt = 0
 temp_sum = 0
+dimension_cnt = [0, 0, 0, 0]
 for i in range(test_data_size):
 
     # print(predictions[i], target_test[i])
     temp = 0
     for j in range(4):
         if predictions[i][j] == target_test[i][j]:
+            dimension_cnt[j] += 1
             temp += 1
     temp_sum += temp
     if temp == 4:
         cnt += 1
+
 
 print("cnt : %d" %cnt)
 print("size : %d" %test_data_size)
@@ -122,3 +126,6 @@ print()
 print("temp : %d" %temp_sum)
 print("size : %d" %(test_data_size * 4))
 print("accuracy : %0.3f" %(temp_sum / (test_data_size * 4)))
+print()
+for i in range(4):
+    print("%d 차원 정확도 : %0.3f" %(i, (dimension_cnt[i] / test_data_size)))

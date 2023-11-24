@@ -4,7 +4,6 @@ import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.layers import LSTM, Embedding, Dense #ignore : 
 from tensorflow.keras.models import Sequential
-import torch
 
 
 with open("Python\\Machine Learning\\group_project\\input\\h_input_data.pkl", "rb") as fr:
