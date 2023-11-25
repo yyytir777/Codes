@@ -83,17 +83,15 @@ model = Sequential()
 model.add(LSTM(hidden_units))
 model.add(Dense(4, activation='sigmoid'))
 
-optimizer = Adam(learning_rate = 0.00001)
-early_stopping = EarlyStopping(monitor='val_accuracy', patience=3)
+optimizer = Adam(learning_rate = 0.0001)
 model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['acc'])  # Change loss function
-history = model.fit(x_train, y_train, epochs=100, batch_size=100, validation_split = 0.2, callbacks=[early_stopping])
+history = model.fit(x_train, y_train, epochs=10, batch_size=50, validation_split = 0.2)
 
 # 모델 평가
 model.evaluate(x_test, y_test)
 
 # 모델 예측
 predictions = model.predict(x_test)
-print(predictions)
 for i in range(len(predictions)):
     for j in range(len(predictions[i])):
         if predictions[i][j] >= 0.5:
@@ -101,6 +99,7 @@ for i in range(len(predictions)):
         else:
             predictions[i][j] = 0
 
+print(predictions)
 
 # 예측 결과 출력
 cnt = 0
@@ -108,7 +107,7 @@ temp_sum = 0
 dimension_cnt = [0, 0, 0, 0]
 for i in range(test_data_size):
 
-    # print(predictions[i], target_test[i])
+    print(predictions[i], target_test[i])
     temp = 0
     for j in range(4):
         if predictions[i][j] == target_test[i][j]:
@@ -117,6 +116,10 @@ for i in range(test_data_size):
     temp_sum += temp
     if temp == 4:
         cnt += 1
+
+with open("rnn_predict_data.pkl", "wb") as fr:
+    pickle.dump(predictions, fr)
+
 
 
 print("cnt : %d" %cnt)
