@@ -58,7 +58,7 @@ rf = np.array(rf)
 
 # 모델 predict 값 출력
 # print("knn : \n", knn)
-# # print("lr : ", lr)
+# # print("lr : \n", lr)
 # print("rnn : \n", rnn)
 # print("xg : \n", xg)
 # print("rf : \n", rf)

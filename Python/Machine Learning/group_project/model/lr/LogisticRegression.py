@@ -1,99 +1,75 @@
+import pandas as pd
 import numpy as np
+import pickle
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
+# 데이터 로드
+twitter_data_path = 'twitter_MBTI.csv'  
+encoded_data_path = 'input_data.pkl'  
 
-# LogisticRegression Class
-class LogisticRegression():
-    def __init__(self, lr, epoch, x_train, y_train, x_test, y_test):
-        self._lr = lr
-        self._epoch = epoch
-        self._x_train = x_train.reshape(60000, 28 * 28)
-        self._x_test = x_test.reshape(10000, 28 * 28)
-        self._n = 1000 #데이터 개수
-        # 0으로 초기화
-        self._y_train = np.zeros(shape=(self._n, 10))
-        self._y_test = np.zeros(shape=(self._n, 10))
-        self._w = np.zeros((len(self._x_train[0]) + 1)).reshape(785,1)
-        self._y_test_for_compare = y_test
+twitter_data = pd.read_csv(twitter_data_path)
 
-        # 사용할 데이터 크기로 자르기
-        self._x_train = self._x_train[0:self._n,:] # -> shape : (100, 784)
-        self._x_test = self._x_test[0:self._n,:] # -> shape : (100, 784)
-        y_train = y_train[0:self._n] # -> shape : (100,)
-        y_test = y_test[0:self._n] # -> shape : (100,)
+with open(encoded_data_path, 'rb') as file:
+    encoded_data = pickle.load(file)
 
-        # y_test, y_train에서 target class만 1로 바꾸고 나머지를 0으로 치환
-        # ex) target_class가 7일때, y_train, y_test의 원소가 7이면 1로, 아니면 0으로 설정
-        for i in range(self._n):
-            self._y_train[i][y_train[i]] = 1
-            self._y_test[i][y_test[i]] = 1
+# MBTI 레이블을 네 가지 차원으로 분리하는 함수
+def extract_dimension(label, index):
+    return 1 if label[index].upper() in ['E', 'S', 'T', 'P'] else 0
 
-        new_column = np.ones((self._n,1))
-        self._x_train = np.hstack((new_column, self._x_train)) # -> shape : (100, 785)
-        self._x_test = np.hstack((new_column, self._x_test)) # -> shape : (100, 785)
-        self._y_train = self._y_train.reshape(self._n, 10) # -> shape : (100,10)
-        self._y_test = self._y_test.reshape(self._n, 10) # -> shape : (100,10)
+# MBTI 레이블을 네 가지 차원으로 분리
+twitter_data['E_I'] = twitter_data['label'].apply(lambda x: extract_dimension(x, 0))
+twitter_data['S_N'] = twitter_data['label'].apply(lambda x: extract_dimension(x, 1))
+twitter_data['T_F'] = twitter_data['label'].apply(lambda x: extract_dimension(x, 2))
+twitter_data['P_J'] = twitter_data['label'].apply(lambda x: extract_dimension(x, 3))
 
-    def getCostList(self):
-        return self._epoch, self._cost_list
-    
-    def sigmoid_f(self, z):
-        return 1 / (1 + np.exp(-z))
-        
-    def cost_f(self, y, h):
-        cost = -np.sum(y * np.log(h) + (1 - y) * np.log(1 - h), axis=0) / self._n
-        return cost
+# 데이터 준비
+X = encoded_data
+y = twitter_data[['E_I', 'S_N', 'T_F', 'P_J']]
 
-    def gradient_descent(self, x, y, h):
-        # size : (785, 10)
-        return np.dot(x.T, h-y) / self._n
-    
+# 데이터 스케일링
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
 
-    # epoch번 반복하여 self._w update
-    def learn(self):
-        self._cost_list = np.empty((0,10))
-        for _ in range(self._epoch):
+# 각 차원별로 SVM 모델 훈련 및 평가
+results_svm = {}
+dimensions = ['E_I', 'S_N', 'T_F', 'P_J']
 
-            x = np.dot(self._x_train, self._w) # -> (100,785) x (785,1) = (100,1)
-            y = self._y_train # (100,10)
+for dim in dimensions:
+    # 데이터 분할
+    y_dim = twitter_data[dim]
+    indices = np.arange(len(X_scaled))
+    test_indices = indices[indices % 5 == 0]  # 5의 배수 인덱스
+    train_indices = indices[indices % 5 != 0]  # 나머지 인덱스
 
-            # sigmoid(x) h : (100,1)
-            h = self.sigmoid_f(x)
+    X_train, X_test = X_scaled[train_indices], X_scaled[test_indices]
+    y_train, y_test = y_dim.iloc[train_indices], y_dim.iloc[test_indices]
 
-            # cost(h) cost : (10,)
-            cost = self.cost_f(y, h)
-            cost = np.array(cost).reshape(1,10)
-            self._cost_list = np.concatenate([self._cost_list, cost])
+    # SVM 모델 훈련
+    svm_model = SVC()
+    svm_model.fit(X_train, y_train)
 
-            # gradient : (785,1)
-            gradient = self.gradient_descent(self._x_train, y, h)
-            self._w = self._w - self._lr * gradient
+    # 예측
+    y_pred = svm_model.predict(X_test)
 
-    # predict : 새로운 속성을 input했을때, 그 레이블에 속하는지 아닌지 판단
-    def predict(self):
+    # 성능 평가
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
 
-        x = np.dot(self._x_test, self._w) # (100, 785) x (785, 10) = (100, 10)
-        h = self.sigmoid_f(x)
+    # 결과 저장
+    results_svm[dim] = {
+        'accuracy': accuracy, 
+        'precision': precision, 
+        'recall': recall, 
+        'f1_score': f1
+    }
 
-        row_max_list = list()
-        for i in range(self._n):
-            # h를 각 데이터별로 나눔
-            row = h[i,:]
-            # 해당 데이터에서 0-9까지 target class에 대한 sigmoid값의 최대값의 인덱스 반환
-            target_class = np.argmax(row)
-            # 반환한 인덱스 값은 predict한 target class로 사용
-            row_max_list.append(target_class)
-        
-        cnt = 0
-        for i in range(self._n):
-            if row_max_list[i] == self._y_test_for_compare[i]:
-                cnt += 1
-        print("accuracy : %0.3f" %(cnt / self._n))
-
-    def getCost(self):
-        for i in range(self._epoch):
-            print("epoch: %d cost : " %(i), self._cost_list[i])
-
-    def run(self):
-        self.learn()
-        self.getCost()
-        self.predict()
+# 결과 출력
+for dim, result in results_svm.items():
+    print(f"Results for {dim}:")
+    print(result)
+    print()
