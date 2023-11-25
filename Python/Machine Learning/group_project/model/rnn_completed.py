@@ -129,3 +129,8 @@ print("accuracy : %0.3f" %(temp_sum / (test_data_size * 4)))
 print()
 for i in range(4):
     print("%d 차원 정확도 : %0.3f" %(i, (dimension_cnt[i] / test_data_size)))
+
+
+
+with open("y_test.pkl", "wb") as fr:
+    pickle.dump(y_test, fr)
