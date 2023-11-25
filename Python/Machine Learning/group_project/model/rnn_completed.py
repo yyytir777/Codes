@@ -22,9 +22,9 @@ label_mapping = {
 }
 
 binary_mapping = {
-    'i' : 0, 'e' : 1,
-    'n' : 0, 's' : 1,
-    'f' : 0, 't' : 1,
+    'e' : 0, 'i' : 1,
+    's' : 0, 'n' : 1,
+    't' : 0, 'f' : 1,
     'p' : 0, 'j' : 1
 }
 # mbti string으로 되어있는 리스트에서 하나의 mbti를 4개의 binary signal로 변환(비트마스크)
@@ -43,7 +43,7 @@ target_test = list()
 # train_data: 5배수 번째가 아닌 데이터
 # test_data: 5배수 번째인 데이터
 for i in range(len(target_class_data_mapped)):
-    if (i + 1) % 5 == 0:
+    if (i % 5) == 0:
         x_test.append(input_data[i])
         target_test.append(target_class_data_mapped[i])
     else:
@@ -83,9 +83,8 @@ model = Sequential()
 model.add(LSTM(hidden_units))
 model.add(Dense(4, activation='sigmoid'))
 
-optimizer = Adam(learning_rate = 0.0001)
-model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['acc'])  # Change loss function
-history = model.fit(x_train, y_train, epochs=10, batch_size=50, validation_split = 0.2)
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['acc'])  # Change loss function
+history = model.fit(x_train, y_train, epochs=3, batch_size=50, validation_split = 0.2)
 
 # 모델 평가
 model.evaluate(x_test, y_test)
@@ -99,7 +98,7 @@ for i in range(len(predictions)):
         else:
             predictions[i][j] = 0
 
-print(predictions)
+print("length : ", len(predictions))
 
 # 예측 결과 출력
 cnt = 0
@@ -119,8 +118,6 @@ for i in range(test_data_size):
 
 with open("rnn_predict_data.pkl", "wb") as fr:
     pickle.dump(predictions, fr)
-
-
 
 print("cnt : %d" %cnt)
 print("size : %d" %test_data_size)
