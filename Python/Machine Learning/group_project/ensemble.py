@@ -4,8 +4,8 @@ import numpy as np
 with open("knn_predict_data.pkl", "rb") as knn_f:
     knn = pickle.load(knn_f)
 
-# with open("lr_predict_data.pkl", "rb") as lr_f:
-#     lr = pickle.load(lr_f)
+with open("lr_predict_data.pkl", "rb") as lr_f:
+    temp_lr = pickle.load(lr_f)
 
 with open("rnn_predict_data.pkl", "rb") as rnn_f:
     rnn = pickle.load(rnn_f)
@@ -22,6 +22,17 @@ rnn = rnn.astype(np.int32)
 
 
 index_list = ['E_I', 'S_N', 'T_F', 'P_J']
+# lr_predict_data.pkl 데이터 정렬
+lr = list()
+cnt = 0
+for i in range(len(temp_lr[0])):
+    temp = list()
+    for j in range(4):
+        temp.append(temp_lr[j][cnt])
+    lr.append(temp)
+    cnt += 1
+
+
 # xg_predict_data.pkl 데이터 정렬
 xg = list()
 cnt = 0
@@ -44,24 +55,24 @@ for i in range(len(temp_rf['E_I'])):
     cnt += 1
 
 knn = np.array(knn)
-# lr = np.array(lr)
+lr = np.array(lr)
 rnn = np.array(rnn)
 xg = np.array(xg)
 rf = np.array(rf)
 
 # 모델 predict 값 shape 출력
-# print(knn.shape)
-# # print(lr.shape)
-# print(rnn.shape)
-# print(xg.shape)
-# print(rf.shape)
+print(knn.shape)
+print(lr.shape)
+print(rnn.shape)
+print(xg.shape)
+print(rf.shape)
 
 # 모델 predict 값 출력
-# print("knn : \n", knn)
-# # print("lr : \n", lr)
-# print("rnn : \n", rnn)
-# print("xg : \n", xg)
-# print("rf : \n", rf)
+print("knn : \n", knn)
+print("lr : \n", lr)
+print("rnn : \n", rnn)
+print("xg : \n", xg)
+print("rf : \n", rf)
 
 def majority_vote(lst):
     return max(lst, key=lst.count)

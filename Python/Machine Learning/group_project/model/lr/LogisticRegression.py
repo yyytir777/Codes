@@ -37,6 +37,7 @@ X_scaled = scaler.fit_transform(X)
 results_svm = {}
 dimensions = ['E_I', 'S_N', 'T_F', 'P_J']
 
+lst = list()
 for dim in dimensions:
     # 데이터 분할
     y_dim = twitter_data[dim]
@@ -54,6 +55,7 @@ for dim in dimensions:
     # 예측
     y_pred = svm_model.predict(X_test)
 
+    lst.append(y_pred)
     # 성능 평가
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred)
@@ -69,7 +71,12 @@ for dim in dimensions:
     }
 
 # 결과 출력
-for dim, result in results_svm.items():
-    print(f"Results for {dim}:")
-    print(result)
-    print()
+# for dim, result in results_svm.items():
+#     print(f"Results for {dim}:")
+#     print(result)
+#     print()
+
+print(lst)
+
+with open("lr_predict_data.pkl", "wb") as fr:
+    pickle.dump(lst, fr)
