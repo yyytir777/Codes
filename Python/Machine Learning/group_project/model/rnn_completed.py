@@ -2,17 +2,27 @@ import numpy as np
 import pickle
 import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
-from tensorflow.keras.layers import LSTM, Embedding, Dense #ignore : 
+from tensorflow.keras.layers import LSTM, Embedding, Dense
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
-
+import matplotlib.pyplot as plt
 
 with open("Python\\Machine Learning\\group_project\\input\\input_data.pkl", "rb") as fr:
     input_data = pickle.load(fr)
 
 with open("Python\\Machine Learning\\group_project\\input\\target_class.pkl", "rb") as fr:
     target_class_data = pickle.load(fr)
+
+class LossHistory(tf.keras.callbacks.Callback):
+    def on_train_begin(self, logs=None):
+        self.losses = []
+        self.accuracy = []
+
+    def on_epoch_end(self, epoch, logs=None):
+        self.losses.append(logs['loss'])
+        self.accuracy.append(logs['acc'])
+
 
 label_mapping = {
     'istj': 0, 'isfj': 1, 'infj': 2, 'intj': 3,
@@ -27,6 +37,7 @@ binary_mapping = {
     't' : 0, 'f' : 1,
     'p' : 0, 'j' : 1
 }
+
 # mbti string으로 되어있는 리스트에서 하나의 mbti를 4개의 binary signal로 변환(비트마스크)
 target_class_data_mapped = list()
 for mbti in target_class_data:
@@ -77,17 +88,21 @@ y_test = np.array(y_test, dtype=np.float32)
 x_train = np.reshape(x_train, (x_train.shape[0], 1, x_train.shape[1]))
 x_test = np.reshape(x_test, (x_test.shape[0], 1, x_test.shape[1]))
 
+history_callback = LossHistory()
+
 hidden_units = 4
 
+optimizer = Adam(learning_rate=0.0001)
 model = Sequential()
 model.add(LSTM(hidden_units))
 model.add(Dense(4, activation='sigmoid'))
 
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['acc'])  # Change loss function
-history = model.fit(x_train, y_train, epochs=3, batch_size=50, validation_split = 0.2)
+model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['acc'])  # Change loss function
+history = model.fit(x_train, y_train, epochs=100, batch_size=50, validation_split = 0.2, callbacks = [history_callback])
 
 # 모델 평가
 model.evaluate(x_test, y_test)
+
 
 # 모델 예측
 predictions = model.predict(x_test)
@@ -106,7 +121,7 @@ temp_sum = 0
 dimension_cnt = [0, 0, 0, 0]
 for i in range(test_data_size):
 
-    print(predictions[i], target_test[i])
+    # print(predictions[i], target_test[i])
     temp = 0
     for j in range(4):
         if predictions[i][j] == target_test[i][j]:
@@ -116,8 +131,6 @@ for i in range(test_data_size):
     if temp == 4:
         cnt += 1
 
-with open("rnn_predict_data.pkl", "wb") as fr:
-    pickle.dump(predictions, fr)
 
 print("cnt : %d" %cnt)
 print("size : %d" %test_data_size)
@@ -131,6 +144,23 @@ for i in range(4):
     print("%d 차원 정확도 : %0.3f" %(i, (dimension_cnt[i] / test_data_size)))
 
 
+plt.figure(figsize=(12, 6))
 
-with open("y_test.pkl", "wb") as fr:
-    pickle.dump(y_test, fr)
+# Plot training & validation loss values
+plt.subplot(1, 2, 1)
+plt.plot(history.history['val_loss'])
+plt.title('Model Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend(['Train'], loc='upper right')
+
+# Plot training & validation accuracy values
+plt.subplot(1, 2, 2)
+plt.plot(history.history['val_acc'])
+plt.title('Model Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.legend(['Train'], loc='lower right')
+
+plt.tight_layout()
+plt.show()
