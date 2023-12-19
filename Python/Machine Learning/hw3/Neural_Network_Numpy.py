@@ -86,14 +86,14 @@ class SoftmaxWithLoss:
 
 class TwoLayerNet:
     def __init__(self, x_train, t_train, input_size, hidden_size, output_size, weight_init_std=0.01):
-        self.x = x_train
-        self.t = t_train
+        self.x = x_train[:10000]
+        self.t = t_train[:10000]
 
         self.params = {}
         self.params['W1'] = weight_init_std * np.random.randn(input_size, hidden_size)
         self.params['W2'] = weight_init_std * np.random.randn(hidden_size, output_size)
-        self.params['b1'] = np.zeros(hidden_size)
-        self.params['b2'] = np.zeros(output_size)
+        self.params['b1'] = weight_init_std * np.random.randn(hidden_size)
+        self.params['b2'] = weight_init_std * np.random.randn(output_size)
 
         self.layers = {}
         self.layers['Affine1'] = Affine(self.params['W1'], self.params['b1'])
@@ -117,6 +117,7 @@ class TwoLayerNet:
         if t.ndim != 1:
             t = np.argmax(t, axis=1)
         accuracy = np.sum(y == t) / float(x.shape[0])
+        
         return accuracy
 
     def numerical_gradient(self, x, t):
@@ -161,12 +162,12 @@ class TwoLayerNet:
 
 # 학습 데이터 및 타겟 데이터를 정의
 input_size = 784  # MNIST 이미지 크기
-hidden_size = 10
+hidden_size = 2
 output_size = 10  # 클래스 수 (0부터 9까지의 숫자)
-(x_train, t_train), _ = load_mnist(flatten=True, normalize=True)
+(x_train, t_train), _ = load_mnist(normalize=True, one_hot_label=True)
 
 # 네트워크 생성 및 초기화
 network = TwoLayerNet(x_train, t_train, input_size, hidden_size, output_size)
 
 # 학습 진행
-network.learn(lr=0.01, epoch=100, batch_size=100)
+network.learn(lr=0.01, epoch=10, batch_size=1000)
