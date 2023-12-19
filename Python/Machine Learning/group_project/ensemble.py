@@ -4,8 +4,8 @@ import numpy as np
 with open("knn_predict_data.pkl", "rb") as knn_f:
     knn = pickle.load(knn_f)
 
-with open("lr_predict_data.pkl", "rb") as lr_f:
-    temp_lr = pickle.load(lr_f)
+with open("svm_predict_data.pkl", "rb") as svm_f:
+    svm = pickle.load(svm_f)
 
 with open("rnn_predict_data.pkl", "rb") as rnn_f:
     rnn = pickle.load(rnn_f)
@@ -22,15 +22,6 @@ rnn = rnn.astype(np.int32)
 
 
 index_list = ['E_I', 'S_N', 'T_F', 'P_J']
-# lr_predict_data.pkl 데이터 정렬
-lr = list()
-cnt = 0
-for i in range(len(temp_lr[0])):
-    temp = list()
-    for j in range(4):
-        temp.append(temp_lr[j][cnt])
-    lr.append(temp)
-    cnt += 1
 
 
 # xg_predict_data.pkl 데이터 정렬
@@ -55,24 +46,24 @@ for i in range(len(temp_rf['E_I'])):
     cnt += 1
 
 knn = np.array(knn)
-lr = np.array(lr)
+svm = np.array(svm)
 rnn = np.array(rnn)
 xg = np.array(xg)
 rf = np.array(rf)
 
 # 모델 predict 값 shape 출력
-print(knn.shape)
-print(lr.shape)
-print(rnn.shape)
-print(xg.shape)
-print(rf.shape)
+# print(knn.shape)
+# print(svm.shape)
+# print(rnn.shape)
+# print(xg.shape)
+# print(rf.shape)
 
 # 모델 predict 값 출력
-print("knn : \n", knn)
-print("lr : \n", lr)
-print("rnn : \n", rnn)
-print("xg : \n", xg)
-print("rf : \n", rf)
+# print("knn : \n", knn[:100])
+# print("svm : \n", svm[:100])
+# print("rnn : \n", rnn[:100])
+# print("xg : \n", xg[:100])
+# print("rf : \n", rf[:100])
 
 def majority_vote(lst):
     return max(lst, key=lst.count)
@@ -82,10 +73,10 @@ def majority_vote(lst):
 model_list = [knn, rnn, xg, rf]
 ensemble_predict_list = list()
 for i in range(len(knn)):
-    first_feature = majority_vote(list([knn[i][0], rnn[i][0], xg[i][0], rf[i][0]]))
-    second_feature = majority_vote(list([knn[i][1], rnn[i][1], xg[i][1], rf[i][1]]))
-    third_feature = majority_vote(list([knn[i][2], rnn[i][2], xg[i][2], rf[i][2]]))
-    forth_feature = majority_vote(list([knn[i][3], rnn[i][3], xg[i][3], rf[i][3]]))
+    first_feature = majority_vote(list([knn[i][0], svm[i][0], rnn[i][0], xg[i][0], rf[i][0]]))
+    second_feature = majority_vote(list([knn[i][1], svm[i][1], rnn[i][1], xg[i][1], rf[i][1]]))
+    third_feature = majority_vote(list([knn[i][2], svm[i][2], rnn[i][2], xg[i][2], rf[i][2]]))
+    forth_feature = majority_vote(list([knn[i][3], svm[i][3], rnn[i][3], xg[i][3], rf[i][3]]))
 
     ensemble_predict_list.append([first_feature, second_feature, third_feature, forth_feature])
 
@@ -101,7 +92,7 @@ temp_sum = 0
 dimension_cnt = [0, 0, 0, 0]
 test_data_size = 1563
 for i in range(test_data_size):
-    print(ensemble_predict_list[i], y_test[i])
+    # print(ensemble_predict_list[i], y_test[i])
     temp = 0
     for j in range(4):
         if ensemble_predict_list[i][j] == y_test[i][j]:

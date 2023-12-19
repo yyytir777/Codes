@@ -14,15 +14,6 @@ with open("Python\\Machine Learning\\group_project\\input\\input_data.pkl", "rb"
 with open("Python\\Machine Learning\\group_project\\input\\target_class.pkl", "rb") as fr:
     target_class_data = pickle.load(fr)
 
-class LossHistory(tf.keras.callbacks.Callback):
-    def on_train_begin(self, logs=None):
-        self.losses = []
-        self.accuracy = []
-
-    def on_epoch_end(self, epoch, logs=None):
-        self.losses.append(logs['loss'])
-        self.accuracy.append(logs['acc'])
-
 
 label_mapping = {
     'istj': 0, 'isfj': 1, 'infj': 2, 'intj': 3,
@@ -88,17 +79,15 @@ y_test = np.array(y_test, dtype=np.float32)
 x_train = np.reshape(x_train, (x_train.shape[0], 1, x_train.shape[1]))
 x_test = np.reshape(x_test, (x_test.shape[0], 1, x_test.shape[1]))
 
-history_callback = LossHistory()
 
 hidden_units = 4
 
-optimizer = Adam(learning_rate=0.0001)
 model = Sequential()
 model.add(LSTM(hidden_units))
 model.add(Dense(4, activation='sigmoid'))
 
-model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['acc'])  # Change loss function
-history = model.fit(x_train, y_train, epochs=100, batch_size=50, validation_split = 0.2, callbacks = [history_callback])
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['acc'])  # Change loss function
+history = model.fit(x_train, y_train, epochs=100, batch_size=100, validation_split = 0.2)
 
 # 모델 평가
 model.evaluate(x_test, y_test)
@@ -121,7 +110,7 @@ temp_sum = 0
 dimension_cnt = [0, 0, 0, 0]
 for i in range(test_data_size):
 
-    # print(predictions[i], target_test[i])
+    print(predictions[i], target_test[i])
     temp = 0
     for j in range(4):
         if predictions[i][j] == target_test[i][j]:
@@ -148,7 +137,7 @@ plt.figure(figsize=(12, 6))
 
 # Plot training & validation loss values
 plt.subplot(1, 2, 1)
-plt.plot(history.history['val_loss'])
+plt.plot(history.history['loss'])
 plt.title('Model Loss')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
@@ -156,7 +145,7 @@ plt.legend(['Train'], loc='upper right')
 
 # Plot training & validation accuracy values
 plt.subplot(1, 2, 2)
-plt.plot(history.history['val_acc'])
+plt.plot(history.history['acc'])
 plt.title('Model Accuracy')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
