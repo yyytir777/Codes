@@ -147,7 +147,7 @@ class TwoLayerNet:
         if t.ndim != 1:
             t = np.argmax(t, axis=1)
 
-        accuracy = np.sum(y == t) / float(x.shape[0])
+        accuracy = np.sum(y == t) / x.shape[0]
         return accuracy
     
     def gradient(self, x, t):
@@ -205,11 +205,9 @@ class TwoLayerNet:
 
             if i % 10 == 0:
                 tmp1 = self.accuracy(x_batch, t_batch)
-                tmp2 = self.accuracy(x_test, t_test)
                 self.train_accuracy.append(tmp1)
-                self.test_accuracy.append(tmp2)
 
-                print("%d번재 학습 => train accuracy : %0.3f \t test accuracy : %0.3f" %(i, tmp1, tmp2))
+                print("%d번재 학습 => accuracy : %0.3f" %(i, tmp1))
                 print()
 
 
@@ -217,13 +215,13 @@ class TwoLayerNet:
 input_size = 784  # MNIST 이미지 크기
 hidden_size = 100
 output_size = 10  # 클래스 수 (0부터 9까지의 숫자)
-(x_train, t_train), (x_test, t_test)= load_mnist(normalize=True, one_hot_label=True)
+(x_train, t_train), _ = load_mnist(flatten=True, normalize=True, one_hot_label=True)
 
 # 네트워크 생성 및 초기화
 network = TwoLayerNet(input_size, hidden_size, output_size)
 
 # 학습 진행
-network.learn(x_train, t_train, lr=0.1, epoch=1000, batch_size=1000)
+network.learn(x_train, t_train, lr=0.1, epoch=500, batch_size=1000)
 
 plt.plot(network.train_loss)
 plt.show()
