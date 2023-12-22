@@ -41,6 +41,7 @@ class Relu:
     def __init__(self):
         self.mask = None
 
+
     def forward(self, x):
         # 0보다 작은 element의 index를 mask에 저장 (boolean)
         self.mask = (x <= 0)
@@ -55,6 +56,7 @@ class Relu:
         dx = dout
         return dx
         
+
 class Affine:
     def __init__(self, W, b):
         self.W = W
@@ -63,12 +65,14 @@ class Affine:
         self.dW = None
         self.db = None
 
+
     def forward(self, x):
         self.x = x
         # unit 계산
-        out = np.dot(x, self.W) + self.b
-        return out
+        result = np.dot(x, self.W) + self.b
+        return result
     
+
     def backward(self, dout):
         # dout = (100, 100) or (100, 10)
         # self.W = (784, 100) or (100, 100) or (100, 10)
@@ -82,12 +86,14 @@ class Affine:
 
         return dx
 
+
 # softmax + cross_entropy_error
 class SoftmaxwithLoss:
     def __init__(self):
         self.loss = None
         self.t = None
         self.y = None
+
 
     def forward(self, x, t):
         self.t = t
@@ -98,6 +104,7 @@ class SoftmaxwithLoss:
 
         return self.loss
     
+
     # 
     def backward(self, dout=1):
         batch_size = self.t.shape[0]
@@ -108,8 +115,8 @@ class SoftmaxwithLoss:
     
 
 class NeuralNetwork:
-    def __init__(self, input_size, hidden_size, output_size, hidden_layer):
-        self.hidden_layer = hidden_layer
+    def __init__(self, input_size, hidden_size, output_size, count_layer):
+        self.count_layer = count_layer
         self.params = {}
         self.layers = OrderedDict()
 
@@ -121,7 +128,7 @@ class NeuralNetwork:
         self.ada_lr = 0.01
 
 
-        for i in range(self.hidden_layer):
+        for i in range(self.count_layer):
             # 입력층
             if i == 0:
                 self.params[f'W{i}'] = np.random.randn(input_size, hidden_size) * np.sqrt(2 / input_size)
@@ -130,13 +137,13 @@ class NeuralNetwork:
                 self.layers[f'Relu{i}'] = Relu()
 
             # 은닉층
-            elif 0 < i < self.hidden_layer - 1:
+            elif 0 < i < self.count_layer - 1:
                 self.params[f'W{i}'] = np.random.randn(hidden_size, hidden_size) * np.sqrt(2 / input_size)
                 self.params[f'b{i}'] = np.zeros(hidden_size)
                 self.layers[f'Affine{i}'] = Affine(self.params[f'W{i}'], self.params[f'b{i}'])
                 self.layers[f'Relu{i}'] = Relu()
 
-            # 출력층
+            # 출력층 (마지막에는 Relu x)
             else:
                 self.params[f'W{i}'] = np.random.randn(hidden_size, output_size) * np.sqrt(2 / input_size)
                 self.params[f'b{i}'] = np.zeros(output_size)
@@ -145,18 +152,21 @@ class NeuralNetwork:
         # 출력층의 마지막
         self.lastlayer = SoftmaxwithLoss()
 
+
     def predict(self, x):
         # 예측이므로 layer에 대한 순전파 진행
         for layer in self.layers.values():
             x = layer.forward(x)
         return x
     
+
     def loss(self, x, t):
         # cross_entropy_error 진행 -> loss 값 구함
         y = self.predict(x)
         loss = self.lastlayer.forward(y, t)
         return loss
     
+
     def accuracy(self, x, t):
         y = self.predict(x)
         # y값 중 최댓값을 선택(one hot coding)
@@ -167,6 +177,7 @@ class NeuralNetwork:
         accuracy = np.sum(y == t) / x.shape[0]
         return accuracy
     
+
     def gradient(self, x, t):
         self.loss(x, t)
 
@@ -182,21 +193,23 @@ class NeuralNetwork:
 
         # weight과 bias에 대한 gradient 저장
         gradients= {}
-        for i in range(self.hidden_layer):
+        for i in range(self.count_layer):
             gradients[f'W{i}'] = self.layers[f'Affine{i}'].dW
             gradients[f'b{i}'] = self.layers[f'Affine{i}'].db
 
         return gradients
     
+
     # optitmizer_sgd
     def sgd(self, gradients, x_batch, t_batch):
-        for i in range(self.hidden_layer):
+        for i in range(self.count_layer):
             # learning rate로 학습률 조절
             self.params[f'W{i}'] -= self.lr * gradients[f'W{i}']
             self.params[f'b{i}'] -= self.lr * gradients[f'b{i}']
 
         # 손실 계산
         return self.loss(x_batch, t_batch)
+
 
     # optitmizer_momentum
     def momentum(self, gradients, x_batch, t_batch):
@@ -214,6 +227,7 @@ class NeuralNetwork:
         # 손실 계산
         return self.loss(x_batch, t_batch)
 
+
     # optitmizer_adagrad
     def adagrad(self, gradients, x_batch, t_batch):
         if self.h is None:
@@ -229,6 +243,7 @@ class NeuralNetwork:
 
         # 손실 계산
         return self.loss(x_batch, t_batch)
+
 
     # 학습 진행
     def learn(self, x_train, t_train, lr, epoch, batch_size):
@@ -251,7 +266,7 @@ class NeuralNetwork:
             self.train_loss.append(loss)
 
             # 100배수마다 accuracy 출력
-            if i % 100 == 0:
+            if i % 10 == 0:
                 tmp = self.accuracy(x_batch, t_batch)
                 self.train_accuracy.append(tmp)
 
@@ -262,14 +277,14 @@ class NeuralNetwork:
 input_size = 784  # MNIST 이미지 크기
 hidden_size = 100
 output_size = 10  # 클래스 수 (0부터 9까지의 숫자)
-hidden_layer = 10 # 입력층 + 은닉층 + 출력층 개수
+count_layer = 5 # 입력층 + 은닉층 + 출력층 개수
 (x_train, t_train), _ = load_mnist(flatten=True, normalize=True, one_hot_label=True)
 
 # 초기화
-network = NeuralNetwork(input_size, hidden_size, output_size, hidden_layer)
+network = NeuralNetwork(input_size, hidden_size, output_size, count_layer)
 
 # 학습 진행
-network.learn(x_train, t_train, lr=0.1, epoch=1000, batch_size=100)
+network.learn(x_train, t_train, lr=0.1, epoch=500, batch_size=1000)
 
 # loss함수 출력
 plt.plot(network.train_loss)
