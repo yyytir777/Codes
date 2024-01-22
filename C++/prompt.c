@@ -1,5 +1,7 @@
-#include <stdio.h>
+#include <iostream>
+using namespace std;
 
-int prompt(){
-    
+int main() {
+    cout << "asdf" << endl;
+    return 0;
 }
