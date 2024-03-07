@@ -13,7 +13,7 @@
             "group": "test",
             "args": [
                 "/C",
-                "${fileDirname}\\${fileBasenameNoExtension}"
+                "${fileDirname}\\c"
             ]
         },
         {
@@ -25,7 +25,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}\\c.exe"
             ],
             "options": {
                 "cwd": "c:/MinGW/bin"
