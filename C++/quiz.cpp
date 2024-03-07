@@ -36,8 +36,8 @@ public:
 };
 
 bool GameblingGame::matchAll(){
-    if(num[0] == num[1] && num[1] == num[2]) return true; //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ true ï¿½ï¿½È¯
-    return false; //ï¿½Ù¸ï¿½ï¿½ï¿½ false ï¿½ï¿½È¯
+    if(num[0] == num[1] && num[1] == num[2]) return true; //??? ?????? true ???
+    return false; //????? false ???
 }
 
 GameblingGame::GameblingGame(){
@@ -49,12 +49,12 @@ GameblingGame::GameblingGame(){
 
 void GameblingGame::run(){
     string tmp1, tmp2;
-    cout << "***** ã…ã„´ã…‡ëžŒã„´ã…‡ëžŒã„´. *****" << '\n';
+    cout << "***** ¤±¤¤¤·¶÷¤¤¤·¶÷¤¤. *****" << '\n';
 
-    cout << "Ã¹ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ >> ";
+    cout << "???¡Æ ???? ??? >> ";
     cin >> tmp1;
 
-    cout << "ï¿½Î¹ï¿½Â° ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ >> ";
+    cout << "?¥é?¡Æ ???? ??? >> ";
     cin >> tmp2;
 
     p[0].setName(tmp1);
@@ -67,12 +67,12 @@ void GameblingGame::run(){
             num[i] = (rand() % 3);
         }
 
-        if(matchAll() == true){ //ï¿½ï¿½È£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-            cout << num[0] << '\t' << num[1]<<'\t' << num[2]<<'\t' << p[0].getName() << "ï¿½ï¿½ ï¿½Â¸ï¿½!!";
+        if(matchAll() == true){ //????? ?? ??????
+            cout << num[0] << '\t' << num[1]<<'\t' << num[2]<<'\t' << p[0].getName() << "?? ?¢¬?!!";
             return;
         }  
         else{
-            cout << num[0]<<'\t' << num[1]<<'\t' << num[2]<<'\t' << p[0].getName() << "ï¿½Æ½ï¿½ï¿½ï¿½ï¿½ï¿½!";
+            cout << num[0]<<'\t' << num[1]<<'\t' << num[2]<<'\t' << p[0].getName() << "???????!";
         }
 
         cout << p[1].getName();
@@ -82,11 +82,11 @@ void GameblingGame::run(){
         }
 
         if(matchAll()){
-            cout << num[0]<<'\t' << num[1]<<'\t' << num[2]<<'\t' << p[1].getName() << "ï¿½ï¿½ ï¿½Â¸ï¿½!!";
+            cout << num[0]<<'\t' << num[1]<<'\t' << num[2]<<'\t' << p[1].getName() << "?? ?¢¬?!!";
             return;
         }
         else{
-            cout << num[0]<<'\t' << num[1]<<'\t' << num[2]<<'\t' << p[1].getName() << "ï¿½Æ½ï¿½ï¿½ï¿½ï¿½ï¿½!";
+            cout << num[0]<<'\t' << num[1]<<'\t' << num[2]<<'\t' << p[1].getName() << "???????!";
         }
     } 
 }
