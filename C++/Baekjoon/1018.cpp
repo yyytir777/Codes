@@ -12,6 +12,7 @@ n = ¿­(column)
     jÈ¦¼ö : B
     jÂ¦¼ö : W
 */
+
 int main(){
     int m, n;
     cin >> m >> n;
