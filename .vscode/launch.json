@@ -5,7 +5,7 @@
             "name": "C/C++: File",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "program": "${fileDirname}\\a.out",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -21,7 +21,7 @@
                 }
             ],
             "preLaunchTask": "C/C++: g++.exe 활성 파일 빌드"
-        },
+},
         {
             "name": "(Windows) 시작",
             "type": "cppvsdbg",

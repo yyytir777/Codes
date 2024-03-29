@@ -8,12 +8,62 @@
     },
     "tasks": [
         {
+            "label": "save and compile for C++",
+            "command": "g++",
+            "args": [
+                "${file}",
+                "-g",
+                "-o",
+                "${fileDirname}/a.out"
+            ],
+            "group": "build",
+            "problemMatcher": {
+                "fileLocation": [
+                    "relative",
+                    "${workspaceRoot}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "save and compile for C",
+            "command": "gcc",
+            "args": [
+                "${file}",
+                "-g",
+                "-o",
+                "${fileDirname}/a.out"
+            ],
+            "group": "build",
+            "problemMatcher": {
+                "fileLocation": [
+                    "relative",
+                    "${workspaceRoot}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
             "label": "execute",
             "command": "cmd",
             "group": "test",
             "args": [
                 "/C",
-                "${fileDirname}\\c"
+                "${fileDirname}\\a.out"
             ]
         },
         {
@@ -21,11 +71,10 @@
             "label": "C/C++: g++.exe 활성 파일 빌드",
             "command": "c:/MinGW/bin/g++.exe",
             "args": [
-                "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}\\c.exe"
+                "${fileDirname}\\a.out"
             ],
             "options": {
                 "cwd": "c:/MinGW/bin"
