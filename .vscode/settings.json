@@ -43,7 +43,9 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "queue": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "cstring": "cpp",
+        "ctime": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled",
     "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-18.0.1.1",
