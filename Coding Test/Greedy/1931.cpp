@@ -11,18 +11,18 @@ int main() {
 
     for(int i = 0; i < n; i++) {
         int end, start;
-        cin >> end >> start;
+        cin >> start >> end;
         arr[i] = make_pair(end, start);
     }
 
-    sort(arr, arr+n, greater<int>());
+    sort(arr, arr+n);
 
-    int cnt = 0;
-    int firstEndTime = arr[0].first;
-    for(int i = 0; i < n; i++) {
-        if(arr[i].second >= firstEndTime) {
+    int cnt = 1;
+    int firtEndTime = arr[0].first;
+    for(int i = 1; i <= n; i++) {
+        if(firtEndTime <= arr[i].second) {
             cnt++;
-            firstEndTime = arr[i].first;
+            firtEndTime = arr[i].first;
         }
     }
 
