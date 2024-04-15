@@ -1,11 +1,13 @@
 #include <iostream>
 #define MAX 20001
-#define INF 12345678
+#define INF 87654321
 using namespace std;
 
-int graph[MAX][MAX] = {INF,};
+int graph[MAX][MAX];
 int V, E;
 int K;
+
+
 void input(){
     cin >> V >> E;
 
@@ -16,13 +18,6 @@ void input(){
         cin >> u >> v >> w;
         if(graph[u][v] > w)
             graph[u][v] = w;
-    }
-
-    for(int i = 1; i <= V; i++) {
-        for(int j = 1; j <= V; j++) {
-            cout << graph[i][j] << " ";
-        }
-        cout <<endl;
     }
 }
 

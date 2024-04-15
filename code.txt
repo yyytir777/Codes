@@ -1,4 +1,0 @@
-java : intellij(jetbrains ide), eclipse
-html/css/javascript : Vscode, WebStorm(jetbrains ide)
-python : Vscode, pycharm(jetbrains ide)
-c/c++ : visual studio
