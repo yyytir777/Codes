@@ -63,7 +63,7 @@
             "group": "test",
             "args": [
                 "/C",
-                "${fileDirname}\\a.out"
+                "${fileDirname}/a.out"
             ]
         },
         {
