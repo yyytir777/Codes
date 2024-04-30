@@ -1,55 +1,76 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
+#define MAX 51
 using namespace std;
-/*
-m x n
-m = Çà(row)
-n = ¿­(column)
 
-1) iÈ¦¼ö ->
-    jÈ¦¼ö : W
-    jÂ¦¼ö : B
-2) iÂ¦¼ö ->
-    jÈ¦¼ö : B
-    jÂ¦¼ö : W
-*/
+char board[MAX][MAX] = {0,};
+vector<int> v;
 
-int main(){
-    int m, n;
-    cin >> m >> n;
+string black_board[8] = {
+    "BWBWBWBW",
+    "WBWBWBWB",
+    "BWBWBWBW",
+    "WBWBWBWB",
+    "BWBWBWBW",
+    "WBWBWBWB",
+    "BWBWBWBW",
+    "WBWBWBWB"
+};
+
+string white_board[8] = {
+    "WBWBWBWB",
+    "BWBWBWBW",
+    "WBWBWBWB",
+    "BWBWBWBW",
+    "WBWBWBWB",
+    "BWBWBWBW",
+    "WBWBWBWB",
+    "BWBWBWBW",
+};
+
+int white(int x, int y) {
     int cnt = 0;
 
-    char arr = new char[m][n];
+    for(int i = 0; i < 8; i++) {
+        for(int j = 0; j < 8; j++){
+            if(white_board[i][j] == board[x+i][y+j]) cnt++;
+        }
+    }
+    return cnt;
+}
 
-    for(int i = 0; i < m; i++){
-        for(int j = 0; j < n; j++){
-            if(i % 2 != 0){ //i È¦¼ö
-                if(j % 2 != 0){
-                    arr[i][j] = 'W';
-                }
-                else{
-                    arr[i][j] = 'B';
-                }
-            }
-            else{
-                if(j % 2 !=){
-                    arr[i][j] = 'B';
-                }
-                else{
-                    arr[i][j] = 'W';
-                }
-            }
+int black(int x , int y) {
+    int cnt = 0;
+
+    for(int i = 0; i < 8; i++) {
+        for(int j = 0; j < 8; j++){
+            if(black_board[i][j] == board[x+i][y+j]) cnt++;
+        }
+    }
+    return cnt;
+}
+
+int main() {
+    int M, N;
+    cin >> M >> N;
+
+    string temp;
+    for(int i = 0; i < M; i++) {
+        cin >> temp;
+        for(int j = 0; j < N; j++) {
+            board[i][j] = temp[j];
         }
     }
 
-    for(int i = 0; i < m; i++){
-        string str;
-        cin >> str;
-        for(int j = 0; j < str.size() - 1; j++){
-            if(str[j] == arr[i][j + 1]){
-                cnt++;
-            }
+    for(int i = 0; i + 8 <= M; i++) {
+        for(int j = 0; j + 8 <= N; j++) {
+            int tmp = min(white(i, j), black(i, j));
+            v.push_back(tmp);
         }
     }
-    cout << cnt;
-    return 0;
+
+    sort(v.begin(), v.end());
+
+    cout << v.at(0);
 }
