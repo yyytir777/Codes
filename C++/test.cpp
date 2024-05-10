@@ -2,5 +2,11 @@
 using namespace std;
 
 int main(){
-    cout << "상수 n 입력 : 256\n공식을 만족하는 k의 최댓값은 8\n";
+    int a = 5, b = 3, c = 12;
+    int t1, t2, t3;
+    t1 = a && b;
+    t2 = a || b;
+    t3 = !c;
+    printf("%d", t2);
+    return 0;
 }

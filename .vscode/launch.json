@@ -2,48 +2,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "java",
-            "name": "test",
-            "request": "launch",
-            "mainClass": "java_project.test.test",
-            "projectName": "Code_982ba444"
-        },
-        {
-            "type": "java",
-            "name": "Testmain",
-            "request": "launch",
-            "mainClass": "java_project.test.Testmain",
-            "projectName": "Code_982ba444"
-        },
-        {
-            "type": "java",
-            "name": "Testmain",
-            "request": "launch",
-            "mainClass": "java.test.Testmain",
-            "projectName": "Code_982ba444"
-        },
-        {
-            "type": "java",
-            "name": "main",
-            "request": "launch",
-            "mainClass": "java.maintest.main",
-            "projectName": "Code_982ba444"
-        },
-        {
-            "type": "java",
-            "name": "Test",
-            "request": "launch",
-            "mainClass": "java.test.Test",
-            "projectName": "Code_982ba444"
-        },
-        {
-            "type": "java",
-            "name": "dp",
-            "request": "launch",
-            "mainClass": "java.dp",
-            "projectName": "Code_982ba444"
-        },
-        {
             "name": "C/C++: File",
             "type": "cppdbg",
             "request": "launch",

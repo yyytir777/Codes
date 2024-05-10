@@ -60,11 +60,15 @@
         {
             "label": "execute",
             "command": "cmd",
-            "group": "test",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
             "args": [
                 "/C",
                 "${fileDirname}/a.out"
-            ]
+            ],
+            "problemMatcher": []
         },
         {
             "type": "cppbuild",
