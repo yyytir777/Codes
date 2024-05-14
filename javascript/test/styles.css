@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0px;
+}
+
+.header {
+    background-color: #f6f6eb;
+}
+
+.header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    height: 63.97px;
+    align-items: center;
+}
+
+.header-left {
+    align-items: center;
+}
+.header-content {
+    display: inline-block;
+    align-items: center;
+
+}
+
+.header-button {
+
+}
+
+.center {
+    background-color: blueviolet;
+}
+.search-bar {
+    background-color: aqua;
+}
+
+.main-content {
+    background-color: brown;
+}

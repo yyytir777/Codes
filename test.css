@@ -1,0 +1,305 @@
+html {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+}
+
+
+body {
+    margin: 0px;
+}
+/* Navigation Bar Styles */
+.navigation {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    width: 100%;
+    height: 63.97px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f6f6eb;
+    color: #381fd1;
+    font-weight: 900;
+}
+
+.nav-wrapper {
+    width: 1000px;
+    margin:  auto;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+#logo {
+    float: left;
+}
+
+.left {
+    float: left;
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+.right {
+    float: right;
+    margin-top: 5px;
+}
+
+.nav-item {
+    margin-right: 20px;
+    cursor: pointer;
+    display: inline;
+}
+
+.nav-button {
+    width: 160.45px;
+    height: 32px;
+    background-color: #381fd1;
+    color: white;
+    padding: 6px 8px;
+}
+
+/* Main Content Styles */
+.main-content {
+    display: flex;
+    padding: 0px 24px;
+    justify-content:center;
+}
+
+.main-wrapper {
+    width: 77%;
+}
+
+.search-section {
+    display: inline;
+    float: left;
+    min-width: 280px;
+    padding: 64px 0px 0px;
+    height: 100%;
+}
+
+.search-section p {
+    margin: 0px 0px 14px;
+}
+.search-section input {
+    width: 280px;
+    height: 44px;
+}
+
+.search-content {
+    padding: 16px 0px 16px 20px;
+}
+
+.search-content:hover {
+    color:#381fd1;
+    font-size: 16px;
+}
+
+.grid-section {
+    width: 700px;
+    display:inline;
+    flex-direction: column;
+    justify-content: center;
+    margin: 64px 0px 0px 64px;
+}
+
+.submit {
+    box-sizing: border-box;
+    width: 280px;
+    height: 205px;
+    margin: 24px 0px 0px;
+    padding: 24px;
+    background-color: #F3F2FC;
+
+}
+
+.submit h3 {
+    font-size: 24px;
+    text-align: center;
+    margin: 0;
+}
+
+.submit p {
+    margin: 8px 0px 24px;
+    text-align: center;
+}
+
+.button {
+    height: 44px;
+    width: 232px;
+    text-align: center;
+    background-color: #381fd1;
+    color: white;
+    line-height: 44px;
+}
+
+h1 {
+    margin: 0;
+}
+
+.title h1 {
+    font-size: 40px;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    color: #10284b;
+}
+
+.title h1{
+    float: left;
+}
+
+.title a {
+    float: right;
+    
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px; /* 각 카드 사이의 간격 */
+    margin-bottom: 100px;
+}
+
+.card img {
+    width: 40px;
+    height: 40px;
+    border-radius: 0.5rem;
+}
+
+.card h1 {
+    margin: 12px 0px 8px;
+    font-size: 16px;
+    color: #381fd1;
+}
+
+.card p {
+    margin: 0px 0px 8px;
+    font-size: 1.2rem;
+    font-weight: 900;
+    line-height: 1.1;
+    overflow-wrap: break-word;
+}
+.card {
+    border-radius: 0.5rem;
+}
+.library-section .card {
+    box-sizing: border-box;
+    border: 1px solid #acacaf;
+    width: 261px;
+    height: 235.5px;
+    padding: 23px 24px 40px;
+}
+
+.collection-section {
+    /* grid-template-columns: repeat(3, 1fr); */
+    margin-top: 30px;
+}
+.collection-section .card {
+    box-sizing: border-box;
+}
+
+.feat-card {
+    position: relative;
+    width: 260px;
+    height: 333.77px;
+    border-radius: 0.5rem;
+}
+
+#first img{
+    width: 260px;
+    border-radius: 0.5rem;
+}
+
+.feat-card h1 {
+    position: absolute;
+    font-size: 24px;
+    top: 32px;
+    left: 32px;
+    color: #10284b;
+    font-size: 1.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+#second {
+    background-color: #F3F2FC;
+}
+#second img {
+    position: absolute;
+    bottom: 0px;
+
+    width: 260px;
+    border-radius: 0.5rem;
+}
+
+#third {
+    background-color: #f6f6eb;
+}
+
+#third img {
+    position: absolute;
+    bottom: 0px;
+
+    width: 260px;
+    border-radius: 0.5rem;
+}
+/* Footer Styles */
+#footer-wrap{
+    width: 100%;
+	position: absolute;
+	background: #10284b;
+
+}
+
+.footer{
+    margin: 96px 0px 0px;
+    padding: 0px 24px;
+}
+
+.footer-grid {
+    margin: 80px 0px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20px; /* 각 카드 사이의 간격 */
+    padding: 0px 24px;
+}
+
+.footer-grid-content {
+    color: white;
+}
+
+.first-li {
+    margin: 0px 0px 8px;
+    list-style-type: none;
+}
+
+li {
+    margin: 0px 0px 8px;
+    list-style-type: none;
+    font-size: 14px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-left {
+    float: left;
+}
+.footer-right img {
+    width: 32px;
+    height: 32px;
+}
+
+.footer-left {
+    float: right;
+    color: #fedb63;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.4;
+
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
