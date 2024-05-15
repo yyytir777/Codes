@@ -68,7 +68,8 @@
         "scoped_allocator": "cpp",
         "shared_mutex": "cpp",
         "typeindex": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "stack": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled",
     "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-18.0.1.1",
