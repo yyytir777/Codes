@@ -1,40 +1,41 @@
 #include <iostream>
-#define MAX 32768
 using namespace std;
 
-int arr[MAX][MAX];
-int N, r, c;
-int cnt = 0;
+long long N, r, c;
+long long cnt = 0;
 
-void visit(int row_start, int row_end, int col_start, int col_end) {
-    int row_mid = (row_start + row_end) / 2;
-    int col_mid = (col_start + col_end) / 2;
+void visit(long long row_start, long long row_end, long long col_start, long long col_end) {
+    long long row_mid = (row_start + row_end) / 2;
+    long long col_mid = (col_start + col_end) / 2;
 
-    if(row_start == row_mid && col_start == col_mid) {
-        arr[row_start][col_start] = cnt++;
-        arr[row_start][col_end] = cnt++;
-        arr[row_end][col_start] = cnt++;
-        arr[row_end][col_end] = cnt++;
+    if(row_start == row_end && col_start == col_end) {
+        if(row_start == r && col_start == c) cout << cnt;
+            cnt++;
         return;
     }
     else {
-        visit(row_start, row_mid, col_start, col_mid);
-        visit(row_start, row_mid, col_mid + 1, col_end);
-        visit(row_mid + 1, row_end, col_start, col_mid);
-        visit(row_mid + 1, row_end, col_mid + 1, col_end);
+        long long weight = ((row_end - row_start + 1) / 2) * ((row_end - row_start + 1) / 2);
+        if(r <= row_mid && c <= col_mid) visit(row_start, row_mid, col_start, col_mid);
+        else cnt += weight;
+
+        if(r <= row_mid && col_mid <= c) visit(row_start, row_mid, col_mid + 1, col_end);
+        else cnt += weight;
+
+        if(row_mid <= r && c <= col_mid) visit(row_mid + 1, row_end, col_start, col_mid);
+        else cnt += weight;
+
+        if(row_mid <= r && col_mid <= c) visit(row_mid + 1, row_end, col_mid + 1, col_end);
+        else cnt += weight;
     }
 }
-
 
 int main() {
     cin >> N >> r >> c;
 
-    int length = 1;
-    for(int i = 0; i < N; i++) {
+    long long length = 1;
+    for(long long i = 0; i < N; i++) {
         length *= 2;
     }
 
     visit(0, length - 1, 0, length - 1);
-
-    cout << arr[r][c];
 }
