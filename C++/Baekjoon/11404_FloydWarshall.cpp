@@ -22,7 +22,7 @@ int main(){
             if(i == j)
                 d[i][j] = 0;
             else if(w[i][j]) //w[i][j]가 0이 아닐때
-                 d[i][j] = w[i][j];
+                d[i][j] = w[i][j];
             else
                 d[i][j] = INF;
         }
