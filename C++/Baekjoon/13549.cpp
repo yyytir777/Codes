@@ -1,50 +1,50 @@
-#include <iostream>
-#include <queue>
+#include <bits/stdc++.h>
 using namespace std;
-
 #define MAX 100001
+#define INF 987654321
 
-bool visited[MAX] = {0,};
-// pair<time, distance> -> pair<int, int>
-queue<pair<int, int>> pq;
+//                 arrTime, dist
+priority_queue<pair<int, int>> pq;
+int arrTime[MAX];
+int N, K;
+
+int dijkstra(int start) {
+    pq.push({0,start});
+    arrTime[start] = 0;
+
+    while (!pq.empty()) {
+        int cur_time = -pq.top().first;
+        int cur_distance = pq.top().second;
+        pq.pop();
+        
+        if (cur_distance == K) return cur_time;
+
+        // x - 1
+        if (cur_distance - 1 >= 0 && arrTime[cur_distance - 1] > (cur_time + 1)) {
+            arrTime[cur_distance - 1] = cur_time + 1;
+            pq.push({-(cur_time + 1), cur_distance - 1});
+        }
+
+        // x + 1
+        if (cur_distance + 1 < MAX && arrTime[cur_distance + 1] > (cur_time + 1)) {
+            pq.push({-(cur_time + 1), cur_distance + 1});
+        }
+
+        // 2x
+        if (cur_distance * 2 < MAX && arrTime[cur_distance * 2] > cur_time) {
+            pq.push({-cur_time, cur_distance * 2});
+        }
+    }
+}
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int N, K;
     cin >> N >> K;
 
-    pq.push(make_pair(0,0));
-    visited[0] = 1;
-
-    while (!pq.empty()) {
-
-        int time = pq.front().first;
-        int distance = pq.front().second;
-
-        pq.pop();
-        visited[distance] = 1;
-
-        if (distance == K) {
-            cout << time;
-            break;
-        }
-
-        // x - 1
-        if (distance - 1 >= 0 && visited[distance - 1] == 0) {
-            pq.push(make_pair(time + 1, distance - 1));
-        }
-
-        // x + 1
-        if (distance + 1 <= MAX && visited[distance + 1] == 0) {
-            pq.push(make_pair(time + 1, distance + 1));
-        }
-
-        // 2x
-        if (distance * 2 <= MAX && visited[distance * 2] == 0) {
-            pq.push(make_pair(time, distance * 2));
-        }
+    for(int i = 0; i < MAX; i++) {
+        arrTime[i] = INF;
     }
-    return 0;
+    cout << dijkstra(N);
 }
