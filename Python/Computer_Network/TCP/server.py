@@ -1,4 +1,4 @@
-from socket import*
+from socket import *
 
 serverPort = 12000
 serverSocket = socket(AF_INET, SOCK_STREAM)
