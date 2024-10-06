@@ -7,7 +7,6 @@ bool flag = false;
 int n, l, r;
 int A[MAX][MAX] = {0,};
 queue<pair<int, int>> q;
-vector<pair<int, int>> v;
 bool visited[MAX][MAX];
 int sum = 0;
 
@@ -24,7 +23,8 @@ void init_visited() {
     }
 }
 
-void bfs(int a, int b) {
+vector<pair<int, int>> bfs(int a, int b) {
+    vector<pair<int, int>> v;
     q.push({a,b});
     v.push_back({a,b});
     visited[a][b] = 1;
@@ -45,15 +45,15 @@ void bfs(int a, int b) {
 
             int diff = abs(A[next_row][next_col] - A[row][col]);
             if(l > diff || r < diff) continue;
+            if(visited[next_row][next_col]) continue;
 
-            if(!visited[next_row][next_col]) {
-                q.push(next_node);
-                v.push_back(next_node);
-                visited[next_row][next_col] = 1;
-                sum += A[next_row][next_col];
-            }
+            q.push(next_node);
+            v.push_back(next_node);
+            visited[next_row][next_col] = 1;
+            sum += A[next_row][next_col];
         }
     }
+    return v;
 }
 
 int main() {
@@ -67,30 +67,35 @@ int main() {
 
     int days = 0;
     while(true) {
-        if(flag) break;
+        init_visited();
+        flag = 0;
 
-        // 인구 이동 시작 ()
+        // 인구 이동 시작
         for(int i = 1; i <= n; i++) {
             for(int j = 1; j <= n; j++) {
+                vector<pair<int, int>> migration_cnt;
+                migration_cnt.clear();
                 if(!visited[i][j]) {
                     sum = 0;
-                    v.clear();
-                    bfs(i,j);
+                    migration_cnt = bfs(i,j);
                 }
 
-                if(v.size() >= 2) {
+                // 인구 이동이 발생했을 시
+                if(migration_cnt.size() >= 2) {
                     flag = true;
-                    int length = v.size();
+                    int length = migration_cnt.size();
+                    int avg = sum / length;
 
-                    for(auto tmp : v) {
-                        A[tmp.first][tmp.second] = sum / length;
+                    for(pair<int, int> node : migration_cnt) {
+                        A[node.first][node.second] = avg;
                     }
                 }
             }
         }
-        if(flag) days++;
-        init_visited();
+        if(!flag) break;
+        else days++;
     }
+
     cout << days;
     return 0;
 }
