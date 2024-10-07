@@ -43,11 +43,12 @@ int main() {
     int start, dest;
     cin >> start >> dest;
 
-    for(int i = 0; i <= n; i++) {
+    for(int i = 1; i <= n; i++) {
         dist[i] = INF;
     }
 
     dijkstra(start);
 
     cout << dist[dest];
+    return 0;
 }
