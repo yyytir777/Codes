@@ -4,12 +4,15 @@
 using namespace std;
 
 vector<pair<int, int>> graph[MAX];
-priority_queue<pair<int, int>> pq;
+priority_queue<pair<int, int>> pq; // <dist, node>
 
 int dist[MAX];
 
-void init_dist(int n) {
-    for(int i = 1; i <= n; i++) dist[i] = INF;
+void init(int n) {
+    for(int i = 1; i <= n; i++) {
+        dist[i] = INF;
+        graph[i].clear();
+    }
 }
 
 void dijkstra(int start) {
@@ -21,7 +24,7 @@ void dijkstra(int start) {
         int cur_dist = -pq.top().first;
         pq.pop();
 
-        if(dist[cur_dist] < cur_dist) continue;
+        if(dist[cur_node] < cur_dist) continue;
 
         for(int i = 0; i < graph[cur_node].size(); i++) {
             int next_node = graph[cur_node][i].first;
@@ -42,13 +45,14 @@ int main() {
     while(tc--) {
         cin >> n >> d >> c;
 
+        init(n);
+
         int a, b, s;
         for(int i = 0; i < d; i++) {
             cin >> a >> b >> s;
             graph[b].push_back({a, s});
         }
 
-        init_dist(n);
         dijkstra(c);
 
         int max_dist = 0, cnt = 0;
@@ -58,8 +62,8 @@ int main() {
                 max_dist = max(max_dist, dist[i]);
             }
         }
-
         cout << cnt << ' ' << max_dist << '\n';
     }
+
     return 0;
 }
