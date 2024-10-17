@@ -7,10 +7,10 @@ int main() {
     string tmp;
     cin >> tmp;
 
-    for(int i = 0; i <= tmp.size(); i++) {
+    for(int i = 0; i < tmp.size(); i++) {
         string suffix = "";
         for(int j = 0; j < tmp.size() && j <= i; j++) {
-            suffix = tmp[tmp.size() - j] + suffix;
+            suffix = tmp[tmp.size() - j - 1] + suffix;
         }
         v.push_back(suffix);
     }
