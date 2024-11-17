@@ -1,37 +1,36 @@
 #include <bits/stdc++.h>
-#define MAX 10000
+#define MAX 10001
+#define INF 987654321
 using namespace std;
 
-/*
-
-dp[n] : n까지 가장 짧은 길
-지름길이 없을 때 -> dp[n] = dp[n-1] + 1
-지름길이 있을 때 -> dp[n] = min(dp[n-1] + 1, dp[start] + cost)
-
-
-*/
-vector<pair<int, int>> v[MAX];
+int n, d;
 int dp[MAX];
+vector<pair<int, int>> graph[MAX];
 
-int main() {
-    int n, d;
+void input() {
     cin >> n >> d;
 
-    int start, end, l;
+    int s, e, w;
     for(int i = 0; i < n; i++) {
-        cin >> start >> end >> l;
-        if(end - start < l || end > d) continue;
-        v[end].push_back({start, l});
+        cin >> s >> e >> w;
+        if(e - s <= w || e > d) continue;
+        graph[e].push_back({s, w});
     }
+}
 
+
+void solve() {
     dp[0] = 0;
-
     for(int i = 1; i <= d; i++) {
         dp[i] = dp[i-1] + 1;
-        for(int j = 0; j < i; j++) {
-            
+        for(int j = 0; j < graph[i].size(); j++) {
+            dp[i] = min(dp[i], dp[graph[i][j].first] + graph[i][j].second);
         }
     }
-    cout << dist[n];
-    return 0;
+    cout << dp[d];
+}
+
+int main() {
+    input();
+    solve();
 }

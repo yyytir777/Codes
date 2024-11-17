@@ -91,6 +91,26 @@
                 "isDefault": true
             },
             "detail": "디버거에서 생성된 작업입니다."
+        },
+        {
+            "label": "Build CP for PS",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-std=c++17",
+                "-O0",
+                "-s",
+                "${file}",
+                "-o",
+                "a.out",
+                "&&",
+                "a.out<input.txt>output.txt"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
