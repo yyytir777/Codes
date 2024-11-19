@@ -5,14 +5,14 @@ using namespace std;
 
 int n, m, cnt = 0;
 int dist[MAX];
+int parent[MAX];
 vector<pair<int, int>> graph[MAX];
 priority_queue<pair<int, int>> pq;
-set<pair<int ,int>> ans;
 
 void input() {
     cin >> n >> m;
     int a, b, c;
-    for(int i = 0; i < n; i++) {
+    for(int i = 0; i < m; i++) {
         cin >> a >> b >> c;
         graph[a].push_back({b, c});
         graph[b].push_back({a, c});
@@ -20,7 +20,10 @@ void input() {
 }
 
 void init() {
-    for(int i = 1; i <= n; i++) dist[i] = INF;
+    for(int i = 1; i <= n; i++) {
+        parent[i] = -1;
+        dist[i] = INF;
+    }
 }
 
 void dijkstra(int start) {
@@ -29,7 +32,7 @@ void dijkstra(int start) {
 
     while(!pq.empty()) {
         int cur_node = pq.top().second;
-        int cur_dist = pq.top().first;
+        int cur_dist = -pq.top().first;
         pq.pop();
 
         if(cur_dist > dist[cur_node]) continue;
@@ -41,8 +44,7 @@ void dijkstra(int start) {
             if(nxt_dist < dist[nxt_node]) {
                 dist[nxt_node] = nxt_dist;
                 pq.push({-nxt_dist, nxt_node});
-                cur_node > nxt_node ? ans.insert({nxt_node, cur_node}) : ans.insert({cur_node, nxt_node});
-                cnt++;
+                parent[nxt_node] = cur_node;
             }
         }
     }
@@ -51,9 +53,9 @@ void dijkstra(int start) {
 void solve() {
     dijkstra(1);
 
-    printf("%d\n", cnt);
-    for(auto num : ans) {
-        printf("%d %d\n", num.first, num.second);
+    printf("%d\n", n-1);
+    for(int i = 2; i <= n; i++) {
+        printf("%d %d\n", parent[i], i);
     }
 }
 
