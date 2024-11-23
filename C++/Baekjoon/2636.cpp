@@ -1,143 +1,132 @@
-#include <iostream>
-#include <queue>
+#include <bits/stdc++.h>
+#define MAX 100
+
+#define CHEEZE 1
+#define HOLE_AIR 0
+#define AIR 2
 using namespace std;
 
-#define M 101
-#define check 5
-#define air 0
-#define inner_cheeze 1
-#define outer_cheeze 2
-#define inner 3
 /*
-치즈 구멍 속을 inner(3)로 변환
-
-판에 치즈 배치 후 공기(0)에서 맞닿아있는 치즈를 outer_cheeze(2)로 변환
-
-공기에 닿으면 치즈가 녹음 -> outer_cheeze(1)가 녹음(0)
-
+bfs() -> 전체를 순회로 돎
+공기를 순회할 때, 구멍속을 만났을 때, 공기로 변하게 하며 순회
+치즈를 순회할 때,환치즈만 순회 및 치즈의 개수
+치즈의 개수를 반환
 */
+
+int r, c;
+int graph[MAX][MAX];
+bool visited[MAX][MAX] = {0,};
+
+int row_axis[4] = {0, 0, 1, -1};
+int col_axis[4] = {1, -1, 0, 0};
+
+queue<pair<int, int>> q;
+
+void input() {
+    cin >> r >> c;
+
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+            cin >> graph[i][j];
+        }
+    }
+}
+
+void print() {
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+            cout << graph[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
 /*
-dfs(0,0)을 하면 바깥공기는 5, 치즈 안의 구멍은 0, 치즈는 1 이 됨
+공기를 2로, 구멍 속 공기를 0으로 set하는 과정
 */
-int a, b;
-int board[M][M];
-int axis_x[4] = {0,0,-1,1};
-int axis_y[4] = {1,-1,0,0};
-int time = 0;
-int c_cnt = 0;
-queue<pair<int, int> q;
+void setData() {
+    q.push({1, 1});
+    visited[1][1] = 1;
+    graph[1][1] = AIR;
 
-void bfs(){
-    q.push(make_pair(0,0));
-    board[0][0] = check;
-
-    while(!q.empty()){
-        int x = q.front();
+    while(!q.empty()) {
+        pair<int, int> cur_pos = q.front();
         q.pop();
-        cout << v << " ";
-        //pop하면서 원소 출력
 
-        for(int j = 1; j <= N; j++){
-            if(adj_matrix[v][j] == 1 && state[j] == false){ //정점과 연결되어있고 방문X여야함
-                q.push(j);
-                state[j] = true;
+        for(int i = 0; i < 4; i++) {
+            int nxt_row = cur_pos.first + row_axis[i];
+            int nxt_col = cur_pos.second + col_axis[i];
+
+            if(nxt_row < 0 || nxt_row > r || nxt_col < 0 || nxt_col > c) continue;
+
+            if(graph[nxt_row][nxt_col] == AIR) {
+                q.push({nxt_row, nxt_col});
+                visited[nxt_row][nxt_col] = 1;
+            }
+            else if(graph[nxt_row][nxt_col] == HOLE_AIR) {
+                q.push({nxt_row, nxt_col});
+                visited[nxt_row][nxt_col] = 1;
+                graph[nxt_row][nxt_col] = AIR;
             }
         }
     }
 }
 
-void dfs_check(){
-    int x = 0;
-    int y = 0;
-    int dfs_x;
-    int dfs_y;
-    board[x][y] = check;
+int bfs(pair<int ,int > start) {
+    int cnt = 0;
+    q.push(start);
+    visited[start.first][start.second] = 1;
 
-    for(int i = 0; i < 4; i++){ //상하좌우 인접한 노드를 찾게 해줌
-        dfs_x = x + axis_x[i];
-        dfs_y = y + axis_y[i];
+    while(!q.empty()) {
+        pair<int, int> cur_pos = q.front();
+        cnt++;
+        q.pop();
 
-        if(dfs_x < 0 || dfs_x >= b || dfs_y < 0 || dfs_y >= a){ //맵을 벗어났을때
-            continue;
+        if(adj_with_air()) {
+            graph[cur_pos.first][cur_pos.second] = AIR;
         }
 
-        if(board[dfs_x][dfs_y] == 0){ // 인접한 집이 존재함과 동시에 탐색되지 않은 집일때
-            dfs_check(dfs_x, dfs_y);
-        }
-    }
-}
+        for(int i = 0; i < 4; i++) {
+            int nxt_row = cur_pos.first + row_axis[i];
+            int nxt_col = cur_pos.second + col_axis[i];
 
-void dfs(){
-    int x = 0;
-    int y = 0;
-    int dfs_x;
-    int dfs_y;
-    board[x][y] = check;
+            if(nxt_row < 0 || nxt_row > r || nxt_col < 0 || nxt_col > c) continue;
 
-    for(int i = 0; i < 4; i++){ //상하좌우 인접한 노드를 찾게 해줌
-        dfs_x = x + axis_x[i];
-        dfs_y = y + axis_y[i];
-
-        if(dfs_x < 0 || dfs_x >= b || dfs_y < 0 || dfs_y >= a){ //맵을 벗어났을때
-            continue;
-        }
-
-        if(board[dfs_x][dfs_y] == 0){ // 인접한 집이 존재함과 동시에 탐색되지 않은 집일때
-            dfs(dfs_x, dfs_y);
-        }
-    }
-}
-
-bool isNotCheeze(){
-    int r = 0;
-    for(int i = 0; i < b; i++){
-        for(int j = 0; j < a; j++){
-            if(board[i][j] == 1){
-                r = 1;
+            if(graph[nxt_row][nxt_col] == CHEEZE  && !visited[nxt_row][nxt_col]) {
+                q.push({nxt_row, nxt_col});
+                visited[nxt_row][nxt_col] = 1;
             }
         }
     }
-    if(r == 0){
-        return true;
+}
+
+int melted() {
+    int cnt = 0;
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+            if(graph[i][j] == CHEEZE) {
+                cnt += bfs({i, j});
+            }
+        }
     }
-    else{
-        return false;
+    return cnt;
+}
+
+void solve() {
+    int time = 0;
+    while(true) {
+        setData();
+        int cheeze_cnt = melted();
+        time++;
+
+        if(isAllMelted()) {
+            cout << time << '\n' << cheeze_cnt;
+            return;
+        }
     }
 }
 
-int main(){
-    cin >> b >> a;
-
-    for(int i = 0; i < b; i++){
-        for(int j = 0; j < a; j++){
-            int str;
-            cin >>  str;
-            board[i][j] = str;
-        }
-    }
-
-    dfs_check(); //바깥공기를 5로 초기화
-
-    while(1){
-        int cnt = 0;
-        if(isNotCheeze()){ //치즈가 없다면
-            cout << time << '\n' << cnt;
-            return 0;
-        }
-        else{
-            dfs()
-            cnt = c_cnt;
-        }
-    }
-
-
-
-
-    for(int i = 0; i < b; i++){
-        for(int j = 0; j < a; j++){
-            cout << board[i][j] << " ";
-        }
-        cout << '\n';
-    }
-    return 0;
+int main() {
+    input();
+    solve();
 }
