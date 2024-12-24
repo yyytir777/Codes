@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#define MAX 100
+#define MAX 101
 
 #define CHEEZE 1
 #define HOLE_AIR 0
@@ -15,6 +15,7 @@ bfs() -> 전체를 순회로 돎
 
 int r, c;
 int graph[MAX][MAX];
+bool check_melt_point[MAX][MAX] = {0,};
 bool visited[MAX][MAX] = {0,};
 
 int row_axis[4] = {0, 0, 1, -1};
@@ -41,13 +42,21 @@ void print() {
     }
 }
 
+void init() {
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+            visited[i][j] = 0;
+        }
+    }
+}
+
 /*
 공기를 2로, 구멍 속 공기를 0으로 set하는 과정
 */
 void setData() {
-    q.push({1, 1});
-    visited[1][1] = 1;
-    graph[1][1] = AIR;
+    q.push({0, 0});
+    visited[0][0] = 1;
+    graph[0][0] = AIR;
 
     while(!q.empty()) {
         pair<int, int> cur_pos = q.front();
@@ -59,11 +68,11 @@ void setData() {
 
             if(nxt_row < 0 || nxt_row > r || nxt_col < 0 || nxt_col > c) continue;
 
-            if(graph[nxt_row][nxt_col] == AIR) {
+            if(graph[nxt_row][nxt_col] == AIR && !visited[nxt_row][nxt_col]) {
                 q.push({nxt_row, nxt_col});
                 visited[nxt_row][nxt_col] = 1;
             }
-            else if(graph[nxt_row][nxt_col] == HOLE_AIR) {
+            else if(graph[nxt_row][nxt_col] == HOLE_AIR && !visited[nxt_row][nxt_col]) {
                 q.push({nxt_row, nxt_col});
                 visited[nxt_row][nxt_col] = 1;
                 graph[nxt_row][nxt_col] = AIR;
@@ -72,19 +81,28 @@ void setData() {
     }
 }
 
-int bfs(pair<int ,int > start) {
-    int cnt = 0;
+bool adj_with_air(pair<int, int> pos) {
+    for(int i = 0; i < 4; i++) {
+        int row = pos.first + row_axis[i];
+        int col = pos.second + col_axis[i];
+
+        if(graph[row][col] == AIR) {
+            check_melt_point[pos.first][pos.second] = 1;
+            return true;
+        }
+    }
+    return false;
+}
+
+void bfs(pair<int ,int > start) {
     q.push(start);
     visited[start.first][start.second] = 1;
 
     while(!q.empty()) {
         pair<int, int> cur_pos = q.front();
-        cnt++;
         q.pop();
 
-        if(adj_with_air()) {
-            graph[cur_pos.first][cur_pos.second] = AIR;
-        }
+        adj_with_air(cur_pos);
 
         for(int i = 0; i < 4; i++) {
             int nxt_row = cur_pos.first + row_axis[i];
@@ -100,13 +118,42 @@ int bfs(pair<int ,int > start) {
     }
 }
 
-int melted() {
+void update_melted_point() {
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+            if(check_melt_point[i][j] == 1) {
+                graph[i][j] = AIR;
+            }
+        }
+    }
+}
+
+void melted() {
+    init();
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+            if(graph[i][j] == CHEEZE && !visited[i][j]) {
+                bfs({i, j});
+            }
+        }
+    }
+    update_melted_point();
+}
+
+bool isAllMelted() {
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+            if(graph[i][j] == CHEEZE) return false;
+        }
+    }
+    return true;
+}
+
+int count_cheeze() {
     int cnt = 0;
     for(int i = 0; i < r; i++) {
         for(int j = 0; j < c; j++) {
-            if(graph[i][j] == CHEEZE) {
-                cnt += bfs({i, j});
-            }
+            if(graph[i][j] == CHEEZE) cnt++;
         }
     }
     return cnt;
@@ -115,8 +162,11 @@ int melted() {
 void solve() {
     int time = 0;
     while(true) {
+        int cheeze_cnt = count_cheeze();
+        init();
         setData();
-        int cheeze_cnt = melted();
+        init();
+        melted();
         time++;
 
         if(isAllMelted()) {
