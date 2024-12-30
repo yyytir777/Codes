@@ -4,21 +4,25 @@
 #define W 1
 using namespace std;
 
+typedef pair<int, int> Pair;
+
+
 int r, c;
 int graph[MAX][MAX];
 bool visited[MAX][MAX] = {0,};
 int dist[MAX][MAX];
+vector<Pair> maxDistIdxVector;
 vector<int> minDistCandidate;
-queue<pair<int, int>> q;
+queue<Pair> q;
+int max_dist = 0;
 
 int row_axis[4] = {0, 0, -1, 1};
 int col_axis[4] = {1, -1, 0, 0};
 
-void init() {
+void init_visited() {
 	for(int i = 0; i < r; i++) {
 		for(int j = 0; j < c; j++) {
 			visited[i][j] = 0;
-			dist[i][j] = 0;
 		}
 	}
 }
@@ -35,16 +39,7 @@ void input() {
 	}
 }
 
-void printGraph() {
-	for(int i = 0; i < r; i++) {
-		for(int j = 0; j < c; j++) {
-			cout << dist[i][j] << " ";
-		}
-		cout << '\n';
-	}	
-}
-
-void bfs(pair<int, int> start) {
+int bfs(pair<int, int> start) {
 	q.push(start);
 	visited[start.first][start.second] = 1;
 	dist[start.first][start.second] = 0;
@@ -63,12 +58,14 @@ void bfs(pair<int, int> start) {
 				q.push({nxt_row, nxt_col});
 				visited[nxt_row][nxt_col] = 1;
 				dist[nxt_row][nxt_col] = dist[cur_node.first][cur_node.second] + 1;
+				max_dist = max(max_dist, dist[nxt_row][nxt_col]);
 			}
 		}
 	}
+	return max_dist;
 }
 
-pair<int, int> findMaxDist() {
+Pair findMaxDist() {
 	int max_dist = 0;
 	pair<int, int> pos;
 	for(int i = 0; i < r; i++) {
@@ -86,15 +83,13 @@ void solve() {
 	for(int i = 0; i < r; i++) {
 		for(int j = 0; j < c; j++) {
 			if(graph[i][j] == L && !visited[i][j]) {
-				cout << "r : " << i << " c : " << j << '\n';
-				bfs({i, j});
-				pair<int, int> start = findMaxDist();
-				init();
-				bfs(start);
-				printGraph();
+				bfs({i,j});
+				init_visited();
 			}
 		}
 	}
+
+	cout << max_dist;
 }
 
 int main() {
