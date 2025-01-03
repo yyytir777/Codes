@@ -1,84 +1,70 @@
-// 1043 cpp
+// 20040 cpp
 #include <bits/stdc++.h>
-#define MAX 51
+#define MAX 500001
 using namespace std;
 
 typedef pair<int, int> Pair;
 
 int n, m;
-vector<int> party[MAX];
-vector<int> truth;
+vector<Pair> record;
 int parent[MAX];
-int friends[MAX];
 
-void init() {
+void initParent() {
     for(int i = 0; i < n; i++) parent[i] = i;
 }
 
 int getParent(int n) {
     if(parent[n] == n) return n;
-    return parent[n] = getParent(parent[n]);
+
+    return getParent(parent[n]);
 }
 
-void mergeSet(int a, int b) {
-    a = getParent(a);
-    b = getParent(b);
+bool merge(Pair node) {
+    int a = getParent(node.first);
+    int b = getParent(node.second);
 
-    parent[a] = b;
+    if(a == b) return true;
+    else {
+        if(a > b) parent[a] = b;
+        else parent[b] = a;
+        return false;
+    }
+}
+
+void print_parent() {
+    for(int i = 0; i < n; i++) cout << parent[i] << " ";
+    cout << endl;
 }
 
 void input() {
     cin >> n >> m;
 
-    int num;
-    cin >> num;
-    for(int i = 0; i < num; i++) {
-        int temp; cin >> temp;
-        truth.push_back(temp);
-    }
-
+    int a, b;
     for(int i = 0; i < m; i++) {
-        int cnt; cin >> cnt;
-
-        for(int j = 0; j < cnt; j++) {
-            int temp; cin >> temp;
-            party[i].push_back(temp);
-        }
+        cin >> a >> b;
+        record.push_back({a,b});
     }
 }
 
 void solve() {
-    init();
+    initParent();
 
-    for(int i = 0; i < m; i++) {
-        int set1 = party[i][0];
-        for(int j = 1; j < party[i].size(); j++) {
-            int set2 = party[i][j];
-            mergeSet(set1, set2);
+    int cnt = 1;
+    vector<Pair> temp;
+    for(Pair node : record) {
+        bool isCycle = merge(node);
+        if(isCycle) {
+            cout << cnt;
+            return;
         }
+        else cnt++;
     }
-
-    int ans = m;
-    for(int i = 0; i < m; i++) {
-
-        bool flag = true;
-        for(int j = 0; j < party[i].size(); j++) {
-
-            if(!flag) break;
-            for(int k = 0; k < truth.size(); k++) {
-                if(getParent(truth[k]) == getParent(party[i][j])) {
-                    flag = false;
-                    break;
-                }
-            }
-            if(!flag) ans--;
-        }
-    }
-    cout << ans;
+    cout << "0";
 }
 
 int main() {
     input();
     solve();
+    print_parent();
     return 0;
 }
