@@ -1,70 +1,108 @@
-// 20040 cpp
+// 1939 cpp -> 다시 풀기 = dfs가 아닌 이분탐색으로 풀어야함
+// 
 #include <bits/stdc++.h>
-#define MAX 500001
+#define MAX 10001
+#define INF 110000000
+#define ll long long
 using namespace std;
 
-typedef pair<int, int> Pair;
+const long long long_max = LLONG_MAX;
 
 int n, m;
-vector<Pair> record;
-int parent[MAX];
+int graph[MAX][MAX];
+int depart, dest;
+bool visited[MAX][MAX] = {0,};
+vector<int> min_weight_candidate;
+stack<pair<int, int>> s; // node, min_dist;
 
-void initParent() {
-    for(int i = 0; i < n; i++) parent[i] = i;
-}
-
-int getParent(int n) {
-    if(parent[n] == n) return n;
-
-    return getParent(parent[n]);
-}
-
-bool merge(Pair node) {
-    int a = getParent(node.first);
-    int b = getParent(node.second);
-
-    if(a == b) return true;
-    else {
-        if(a > b) parent[a] = b;
-        else parent[b] = a;
-        return false;
+void init_graph() {
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= n; j++) {
+            graph[i][j] = INF;
+        }
     }
 }
 
-void print_parent() {
-    for(int i = 0; i < n; i++) cout << parent[i] << " ";
-    cout << endl;
+void print_graph() {
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= n; j++) {
+            cout << graph[i][j] << " ";
+        }
+        cout << '\n';
+    }
 }
 
 void input() {
     cin >> n >> m;
-
+    init_graph();
     int a, b;
+    int c;
     for(int i = 0; i < m; i++) {
-        cin >> a >> b;
-        record.push_back({a,b});
+        cin >> a >> b >> c;
+        if(c < graph[a][b]) {
+            graph[a][b] = c;
+            graph[b][a] = c;
+        }
     }
+
+    cin >> depart >> dest;
+}
+
+void dfs(int node, int min_weight) {
+
+    if(node == dest) {
+        min_weight_candidate.push_back(min_weight);
+        return;
+    }
+
+    for(int i = 1; i <= n; i++) {
+        if(i == node || graph[node][i] == long_max) continue;
+
+        int temp;
+        if(!visited[node][i]) {
+            temp = min_weight;
+            min_weight = min(min_weight, graph[node][i]);
+            visited[node][i] = 1;
+            visited[i][node] = 1;
+            dfs(i, min_weight);
+            visited[node][i] = 0;
+            visited[i][node] = 0;
+        }
+
+        min_weight = temp;
+    }
+    return;
+}
+
+// void dfsv2(int depart) {
+//     s.push({depart, long_max});
+
+//     while(!s.empty()) {
+//         int node = s.front().first;
+//         int min_weight = s.front().second;
+//         s.pop();
+
+        
+//         for(int i = 1; i <= n; i++) {
+
+//         }
+//     }
+// }
+
+bool compare(ll a, ll b) {
+    return a > b;
 }
 
 void solve() {
-    initParent();
+    dfs(depart, INF);
 
-    int cnt = 1;
-    vector<Pair> temp;
-    for(Pair node : record) {
-        bool isCycle = merge(node);
-        if(isCycle) {
-            cout << cnt;
-            return;
-        }
-        else cnt++;
-    }
-    cout << "0";
+    sort(min_weight_candidate.begin(), min_weight_candidate.end(), compare);
+
+    cout << min_weight_candidate[0];
 }
 
 int main() {
     input();
     solve();
-    print_parent();
     return 0;
 }
