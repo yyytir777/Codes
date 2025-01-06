@@ -1,49 +1,57 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#define MAX 1000
+// 2437 cpp
+#include <bits/stdc++.h>
+#define ll long
+#define MAX 1001
 using namespace std;
 
-vector<int> v;
-int arr[MAX] = {0,};
 
-bool check(int n){
-    int sum = 0;
-    int j = 0;
-    while(true){
-        if(arr[j] > n){
-            return false;
-        }
-        if(n != sum){
-            sum += arr[j];
-            j++;
-        }
-        else{
-            return true;
-        }
+int n;
+int arr[MAX];
+
+void input() {
+    cin >> n;
+
+    for(int i = 0; i < n; i++) {
+        cin >> arr[i];
     }
 }
 
-int main(){
-    int n;
-    cin >> n;
+void solve() {
+    sort(arr, arr+n);
 
-    for(int i = 0; i < n; i++){
-        int temp;
-        cin >> temp;
-        v.push_back(temp);
-    }
-    sort(v.begin(), v.end());
+    ll sum = 0, ans = 0;
 
-    vector<int>::iterator iter;
-    int i = 0;
-    for(iter = v.begin(); iter != v.end(); iter++){
-        arr[i] = *iter;
-        i++;
+    if(arr[0] > 1) {
+        cout << ans + 1;
+        return;
     }
 
-    for(i = 0; i < n; i++){
+    for(int i = 0; i < n; i++) {
+        sum += arr[i];
+
+        if(i == n-1) {
+            ans = sum + 1;
+            break;
+        }
+
+        if(sum + 1 < arr[i+1]) {
+            ans = sum + 1;
+            break;
+        }
+    }
+
+    cout << ans;
+}
+
+void print() {
+    for(int i = 0; i < n; i++) {
         cout << arr[i] << " ";
     }
+}
+
+int main() {
+    input();
+    solve();
+    // print();
     return 0;
 }
