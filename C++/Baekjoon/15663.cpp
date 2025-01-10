@@ -1,63 +1,82 @@
+// 15663 cpp
 #include <bits/stdc++.h>
-#define MAX 10
 using namespace std;
-//  key : value = {숫자, 개수}
-map<int, int> m_cnt;
-vector<int> v;
-bool visited[MAX] = {0,};
-map<int, int>::iterator iter = m_cnt.begin();
+
 int n, m;
+vector<int> arr;
+vector<vector<int>> seq;
+bool visited[10] = {0,};
 
+void input() {
+    cin >> n >> m;
 
-void dfs(int depth) {
-    if(depth == m) {
-        for(int tmp : v) {
-            cout << tmp << " ";
-        }
-        cout << '\n';
-        return;
-    }
-
-    for(int i = 0; i < m_cnt.size(); i++) {
-        int num = (*iter).first;
-        int cnt = (*iter).second;
-
-        if(visited[i]) {
-            iter++;
-            continue;
-        }
-        if(--cnt < 0) {
-            cnt++;
-            continue;
-        }
-
-        m_cnt[num]--;
-        v.push_back(num);
-        visited[i] = 1;
-
-        dfs(cnt + 1);
-
-        v.pop_back();
-        visited[i] = 0;
-        iter++;
+    int temp;
+    for(int i = 0; i < n; i++) {
+        cin >> temp;
+        arr.push_back(temp);
     }
 }
 
-
-int main() {
-    cin >> n >> m;
-
-    int tmp;
-    for(int i = 0; i < n; i++) {
-        cin >> tmp;
-
-        if(m_cnt.find(tmp) == m_cnt.end()) { // 없을 때
-            m_cnt.insert({tmp, 1});
-        }
-        else { 
-            m_cnt[tmp] += 1;
-        }
+void permutation_dfs(vector<int> &tmp_arr, int idx, int cnt) {
+    if(cnt == m) {
+        seq.push_back(tmp_arr);
+        return;
     }
 
-    dfs(0);
+    for(int i = 0; i < n; i++) {
+        if(!visited[i]) {
+        visited[i] = 1;
+        tmp_arr.push_back(arr[i]);
+        permutation_dfs(tmp_arr, i + 1, cnt + 1);
+        tmp_arr.pop_back();
+        visited[i] = 0;
+        }    
+    }
+}
+
+void print_seq() {
+    for(vector<int> v_element : seq) {
+        for(int element : v_element) {
+            cout << element << " ";
+        }
+        cout << '\n';
+    }
+}
+
+bool isEqual(vector<int> a, vector<int> b) {
+    for(int i = 0; i < a.size(); i++) {
+        if(a[i] != b[i]) return false;
+    }
+    return true;
+}
+
+void print(vector<int> v) {
+    for(auto element : v) cout << element << " ";
+    cout << '\n';
+}
+
+
+void solve() {
+    vector<int> tmp;
+
+    sort(arr.begin(), arr.end());
+
+    permutation_dfs(tmp, 0, 0);
+
+    sort(seq.begin(), seq.end());
+
+    for(int i = 0; i < seq.size(); i++) {
+        if(i >= 1) {
+            bool equal = isEqual(seq[i-1], seq[i]);
+            if(equal) continue;
+            else print(seq[i]);
+        }
+        else print(seq[0]);
+    }
+}
+
+int main() {
+    input();
+    solve();
+    return 0;
 }
