@@ -1,7 +1,21 @@
 {
     "version": "0.2.0",
     "configurations": [
-        {
+            // MAC VSCode용 cpp debugger
+            {
+            "name": "Debug in MAC",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/a.out",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build CP for PS in MAC"
+            },
+            {
             "name": "C/C++: File",
             "type": "cppdbg",
             "request": "launch",
@@ -32,6 +46,19 @@
             "cwd": "${fileDirname}",
             "environment": [],
             "console": "externalTerminal"
+        },
+        {
+            "name": "C/C++: g++ build and debug active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "lldb",
+            "preLaunchTask": "C/C++: g++ build active file"
         }
     ]
 }
