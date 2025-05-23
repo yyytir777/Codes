@@ -1,0 +1,6 @@
+{
+    "shell": true,
+    "working_dir": "$folder",
+    "cmd": "g++ -std=c++17 -O2 -I/Library/Developer/CommandLineTools/usr/include \"$file\" -o ./a.out && ./a.out <input.txt>output.txt",
+    "selector": "source.c++"
+}
