@@ -1,118 +1,112 @@
-// 16236 cpp
+// 3055 cpp
 #include <bits/stdc++.h>
-#define MAX 21
-#define BLANK 0
-#define SHARK 9
+#define MAX 51
 using namespace std;
 
 typedef pair<int, int> Pair;
 
-int n;
-int space[MAX][MAX];
-int shark_size = 2;
-int take_cnt = 0;
+int r, c;
 int result = 0;
-queue<Pair> q;
-Pair shark_pos;
-int visited[MAX][MAX] = {0,};
+char forest[MAX][MAX];
 int dist[MAX][MAX] = {0,};
+bool visited[MAX][MAX] = {0,};
+vector<Pair> floods;
+Pair s, d;
+queue<pair<Pair, int>> q;
 
-// 위, 왼쪽 (priority)
-int row_axis[4] = {-1, 0, 1, 0};
-int col_axis[4] = {0, -1, 0, 1};
-
+int raxis[4] = {1, -1, 0, 0};
+int caxis[4] = {0, 0, 1, -1};
 
 void input() {
-  cin >> n;
+  cin >> r >> c;
+  for(int i = 0; i < r; i++) {
+    for(int j = 0; j < c; j++) {
+      cin >> forest[i][j];
 
-  for(int i = 0; i < n; i++) {
-    for(int j = 0; j < n; j++) {
-      cin >> space[i][j];
-      if(space[i][j] == SHARK) {
-        shark_pos = {i, j};
-        space[i][j] = 0;
-      }
+      if(forest[i][j] == 'S') s = {i,j};
+      if(forest[i][j] == 'D') d = {i,j};
     }
   }
 }
 
-void init() {
-  for(int i = 0; i < n; i++) {
-    for(int j = 0; j < n; j++) {
-      dist[i][j] = 0;
-      visited[i][j] = 0;
+void flooding() {
+  for(int i = 0; i < r; i++) {
+    for(int j = 0; j < c; j++) {
+      if(forest[i][j] == '*') floods.push_back({i,j});
     }
   }
 
-  while(!q.empty()) q.pop();
-}
+  for(auto flood : floods) {
+    for(int i = 0; i < 4; i++) {
+      int nr = flood.first + raxis[i];
+      int nc = flood.second + caxis[i];
 
-bool compare(pair<Pair, int> a, pair<Pair, int> b) {
-  if(a.second != b.second) return a.second < b.second;
-  else {
-    if(a.first.first != b.first.first) return a.first.first < b.first.first;
-    else return a.first.second < b.first.second;
+      if(nr < 0 || nr >= r || nc < 0 || nc >= c) continue;
+      if(forest[nr][nc] == 'X') continue;
+      if(forest[nr][nc] == 'D' || forest[nr][nc] == 'S') continue;
+      forest[nr][nc] = '*';
+    }
+  }
+
+  while(!floods.empty()) {
+    floods.pop_back();
   }
 }
 
-bool bfs() {
-  init();
-  vector<pair<Pair, int>> candidates;
-  q.push(shark_pos);
+void print() {
+  for(int i = 0; i < r; i++) {
+    for(int j = 0; j < c; j++) {
+      cout << forest[i][j] << " ";
+    }
+    cout << "\n";
+  }
+  cout << '\n';
+}
 
-  while (!q.empty()) {
-    Pair cur_pos = q.front();
-    visited[cur_pos.first][cur_pos.second] = 1;
+void bfs() {
+  int depth = 0;
+  q.push({{s.first, s.second}, 1});
+  visited[s.first][s.second] = 1;
+
+  while(!q.empty()) {
+    auto cur_node = q.front();
+    Pair cur_pos = cur_node.first;
     q.pop();
 
+    if(forest[cur_pos.first][cur_pos.second] == 'D') {
+      result = dist[cur_pos.first][cur_pos.second];
+      break;
+    }
+
+
+    if(cur_node.second > depth) {
+      flooding();
+      depth = cur_node.second;
+    }
+
     for(int i = 0; i < 4; i++) {
-      int next_row = cur_pos.first + row_axis[i];
-      int next_col = cur_pos.second + col_axis[i];
+      int nr = cur_pos.first + raxis[i];
+      int nc = cur_pos.second + caxis[i];
 
-      if(next_row < 0 || next_row >= n || next_col < 0 || next_col >= n) continue;
-      if(visited[next_row][next_col]) continue;
-      if(shark_size < space[next_row][next_col]) continue;
-
-      visited[next_row][next_col] = 1;
-      dist[next_row][next_col] = dist[cur_pos.first][cur_pos.second] + 1;
-
-      if(space[next_row][next_col] != 0 && space[next_row][next_col] < shark_size) {
-        candidates.push_back({{next_row, next_col}, dist[next_row][next_col]});
+      if(visited[nr][nc]) continue;
+      if(forest[nr][nc] == '*') continue;
+      else if(forest[nr][nc] == '.' || forest[nr][nc] == 'D') {
+        dist[nr][nc] = dist[cur_pos.first][cur_pos.second] + 1;
+        visited[nr][nc] = 1;
+        q.push({{nr, nc}, cur_node.second + 1});
       }
-
-      q.push({next_row, next_col});
-      
     }
   }
-
-  if(candidates.empty()) return false;
-
-  sort(candidates.begin(), candidates.end(), compare);
-  pair<Pair, int> target = candidates[0];
-
-  result += target.second;
-  shark_pos = target.first;
-  space[target.first.first][target.first.second] = BLANK;
-
-
-  take_cnt++;
-  if(take_cnt == shark_size) {
-    shark_size++;
-    take_cnt = 0;
-  }
-
-  return true;
 }
 
 void solve() {
-  while(1) {
-    if(!bfs()) break;
-  }
-
-  cout << result;
+  bfs();
+  if(result == 0) cout << "KAKTUS";
+  else cout << result;
 }
 
 int main() {
   input();
   solve();
+  return 0;
 }
