@@ -1,74 +1,118 @@
-// 1021 cpp
+// 16236 cpp
 #include <bits/stdc++.h>
+#define MAX 21
+#define BLANK 0
+#define SHARK 9
 using namespace std;
 
-deque<int> d;
-vector<int> nodes;
-int n, m;
+typedef pair<int, int> Pair;
+
+int n;
+int space[MAX][MAX];
+int shark_size = 2;
+int take_cnt = 0;
+int result = 0;
+queue<Pair> q;
+Pair shark_pos;
+int visited[MAX][MAX] = {0,};
+int dist[MAX][MAX] = {0,};
+
+// 위, 왼쪽 (priority)
+int row_axis[4] = {-1, 0, 1, 0};
+int col_axis[4] = {0, -1, 0, 1};
+
 
 void input() {
-	cin >> n >> m;
+  cin >> n;
 
-	for(int i = 1; i <= n; i++) d.push_back(i);
-
-	int tmp;
-	for(int i = 0; i < m; i++) {
-		cin >> tmp;
-		nodes.push_back(tmp);
-	}
+  for(int i = 0; i < n; i++) {
+    for(int j = 0; j < n; j++) {
+      cin >> space[i][j];
+      if(space[i][j] == SHARK) {
+        shark_pos = {i, j};
+        space[i][j] = 0;
+      }
+    }
+  }
 }
 
-void move(int direction) {
-	if(direction == 1) { // 오른쪽으로 이동
-		d.push_front(d.back());
-		d.pop_back();
-	}
-	else { // 왼쪽으로 이동
-		d.push_back(d.front());
-		d.pop_front();
-	}
+void init() {
+  for(int i = 0; i < n; i++) {
+    for(int j = 0; j < n; j++) {
+      dist[i][j] = 0;
+      visited[i][j] = 0;
+    }
+  }
+
+  while(!q.empty()) q.pop();
 }
-	
+
+bool compare(pair<Pair, int> a, pair<Pair, int> b) {
+  if(a.second != b.second) return a.second < b.second;
+  else {
+    if(a.first.first != b.first.first) return a.first.first < b.first.first;
+    else return a.first.second < b.first.second;
+  }
+}
+
+bool bfs() {
+  init();
+  vector<pair<Pair, int>> candidates;
+  q.push(shark_pos);
+
+  while (!q.empty()) {
+    Pair cur_pos = q.front();
+    visited[cur_pos.first][cur_pos.second] = 1;
+    q.pop();
+
+    for(int i = 0; i < 4; i++) {
+      int next_row = cur_pos.first + row_axis[i];
+      int next_col = cur_pos.second + col_axis[i];
+
+      if(next_row < 0 || next_row >= n || next_col < 0 || next_col >= n) continue;
+      if(visited[next_row][next_col]) continue;
+      if(shark_size < space[next_row][next_col]) continue;
+
+      visited[next_row][next_col] = 1;
+      dist[next_row][next_col] = dist[cur_pos.first][cur_pos.second] + 1;
+
+      if(space[next_row][next_col] != 0 && space[next_row][next_col] < shark_size) {
+        candidates.push_back({{next_row, next_col}, dist[next_row][next_col]});
+      }
+
+      q.push({next_row, next_col});
+      
+    }
+  }
+
+  if(candidates.empty()) return false;
+
+  sort(candidates.begin(), candidates.end(), compare);
+  pair<Pair, int> target = candidates[0];
+
+  result += target.second;
+  shark_pos = target.first;
+  space[target.first.first][target.first.second] = BLANK;
+
+
+  take_cnt++;
+  if(take_cnt == shark_size) {
+    shark_size++;
+    take_cnt = 0;
+  }
+
+  return true;
+}
+
 void solve() {
+  while(1) {
+    if(!bfs()) break;
+  }
 
-	int idx, cnt = 0;
-	for(int node : nodes) {
-		// find idx;
-		for(int i = 0; i < d.size(); i++) {
-			if(d[i] == node) {
-				idx = i;
-				break;
-			}
-		}
-
-		// 앞의 element와 가까움 (왼쪽 이동)
-		if(idx <= d.size() / 2) {
-			while(true) {
-				if(d.front() == node) {
-					d.pop_front();
-					break;
-				}
-				move(-1);
-				cnt++;
-			}
-		}
-		else { // 오른쪽 이동
-			while(true) {
-				if(d.front() == node) {
-					d.pop_front();
-					break;
-				}
-				move(1);
-				cnt++;
-			}		
-		}
-	}
-
-	cout << cnt;
+  cout << result;
 }
 
 int main() {
-	input();
-	solve();
-	return 0;
+  input();
+  solve();
 }

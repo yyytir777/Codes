@@ -24,3 +24,42 @@ Origami
    * ctrl/cmd+k, then alt/option+arrow: clone the current file to the destination
    * ctrl/cmd+k, then ctrl/cmd+arrow: create an adjacent pane
    * ctrl/cmd+k, then ctrl/cmd+shift+arrow: destroy an adjacent pane
+
+LSP
+---
+
+                    Thanks for trying out the LSP package!
+                    ======================================
+  
+  
+  This package is a "client" implementation of the "language server protocol".
+  This is a protocol that defines how (language) servers and clients (editors)
+  should talk to each other. It enables high-quality code-complete,
+  signature-help, goto-def, accurate find-references, and more.
+  
+  This package doesn't actually contain any language server by itself. It
+  provides only the glue code to attach language servers to Sublime Text.
+  
+  Exactly which concepts from LSP should map to which concepts from Sublime
+  Text and vice versa is an ongoing research problem. We're certainly still
+  figuring things out!
+  
+  To get up and running for your favorite language, open the documentation at
+  
+      https://lsp.sublimetext.io
+
+
+LSP-clangd
+----------
+
+  ## Installation
+  - Install LSP and LSP-clangd from Package Control
+  - Install clangd using your package manager or let this plugin install clangd for you
+  
+  ## Usage
+  
+  By default, clangd will assume your code is built as clang some_file.cc, and you’ll probably get errors about missing #included files, etc. 
+  
+  For complex projects clangd needs to know your build flags. This can be done using a `compile_commands.json` or `compile_flags.txt` file.
+  
+  See https://clangd.llvm.org/installation#project-setup
