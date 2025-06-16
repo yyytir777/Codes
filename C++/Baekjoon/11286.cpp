@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <algorithm>
 using namespace std;
 
 priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> v;//ture = + & false = -
