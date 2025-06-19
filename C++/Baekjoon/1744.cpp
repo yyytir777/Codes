@@ -1,60 +1,45 @@
+// 1744 cpp
 #include <bits/stdc++.h>
 #define MAX 51
 using namespace std;
 
 int n;
 int arr[MAX];
+int dp[MAX];
 
 void input() {
-	cin >> n;
-
-	for(int i = 0; i < n; i++) {
-		cin >> arr[i];
-	}
-}
-
-bool compare(int a, int b) {
-	return a > b;
-}
-
-void print() {
-	for(int i = 0; i < n; i++) {
-		cout << arr[i] << " ";
-	}
+  cin >> n;
+  for(int i = 1; i <= n; i++) cin >> arr[i];
 }
 
 void solve() {
-	sort(arr, arr+n, compare);
-	// print();
+  sort(arr + 1, arr + n + 1);
+  dp[0] = 0;
+  dp[1] = arr[1];
+  dp[2] = max(arr[1] + arr[2], arr[1] * arr[2]);
 
-	int i = 0, sum = 0;
-	while(i < n) {
-		if(n - i == 1) {
-			sum += arr[i++];
-		}
-		else if(n - i == 2) {
-			sum += max(arr[i] + arr[i+1], arr[i] * arr[i+1]);
-			i += 2;
-		}
-		else {
-			int branch1 = max(arr[i] + arr[i+1] + arr[i+2], arr[i] * arr[i+1] + arr[i+2]);
-			int branch2 = max(arr[i] + arr[i+1] + arr[i+2], arr[i] + arr[i+1] * arr[i+2]);
 
-			if(branch1 >= branch2) {
-				sum += branch1 - arr[i+2];
-				i += 2;
-			}
-			else {
-				sum += branch2;
-				i += 3;
-			}
-		}
-	}
-	cout << sum;
+  /*
+  
+  1, 2, 3 =>
+  1, (2, 3)
+  (1, 2), 3
+  1, 2, 3
+
+  (-3, 0) 0 1 1 (2 3)
+  */
+
+  int result = arr[1];
+  for(int i = 3; i <= n; i++) {
+    dp[i] = max(dp[i-2] + arr[i] * arr[i-1], 
+      max(dp[i-3] + arr[i-2] * arr[i-1] + arr[i], dp[i-1] + arr[i]));
+  }
+
+  cout << dp[n];
 }
 
 int main() {
-	input();
-	solve();
-	return 0;
+  input();
+  solve();
+  return 0;
 }
