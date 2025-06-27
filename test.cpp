@@ -1,59 +1,73 @@
-// 21939 cpp
+// 11054 cpp
 #include <bits/stdc++.h>
+#include <cstdarg>
+#define MAX 1001
 using namespace std;
 
-typedef pair<int, int> Pair;
 int n;
-set<Pair> s;
-map<int, int> pindex;
+int arr[MAX], dp1[MAX], dp2[MAX];
 
-bool compare(Pair a, Pair b) {
-  if(a.first == b.first) return a.second > b.second;
-  return a.first > b.first;
+void input() {
+  cin >> n;
+  for (int i = 0; i < n; i++) {
+    cin >> arr[i];
+  }
+
 }
 
+void init_dp() {
+  for(int i = 0; i < n; i++) {
+    dp1[i] = 1;  
+    dp2[i] = 1;
+  }
+}
+
+void increase_dp() {
+  for(int i = 1; i < n; i++) {
+    for(int j = 0; j < i; j++) {
+      if(arr[j] < arr[i]){
+        dp1[i] = max(dp1[i], dp1[j] + 1);
+      }
+    }
+  }
+}
+
+void decrease_dp() {
+  for(int i = n - 2; i >= 0; i--) {
+    for(int j = n - 1; j > i; j--) {
+      if(arr[j] < arr[i]) {
+        dp2[i] = max(dp2[i], dp2[j] + 1);
+      }
+    }
+  }
+}
+
+void solve() {
+  init_dp();
+  increase_dp();
+  decrease_dp();
+
+  // for(int i = 0; i < n; i++) {
+  //   cout << dp1[i] << " ";
+  // }
+
+  // cout << "\n\n";
+
+  // for(int i = 0; i < n; i++) {
+  //   cout << dp2[i] << " ";
+  // }
+
+  int max_result = 0;
+  for(int i = 0; i < n; i++) {
+    max_result = max(max_result, dp1[i] + dp2[i]);
+    // printf("idx : %d => %d / %d\n", i, dp1[i], dp2[i]);
+  }
+
+  cout << max_result - 1;
+}
 
 int main() {
-  ios_base::sync_with_stdio(0);
-  cin.tie(NULL);
-  cout.tie(NULL);
-
-  cin >> n;
-
-  int p, l, x;
-  for(int i = 0; i < n; i++) {
-    cin >> p >> l;
-    s.insert({l,p});
-    pindex[p] = l;
-  }
-
-
-  int m; cin >> m;
-  string tmp;
-  for(int i = 0; i < m; i++) {
-    cin >> tmp;
-
-    if(tmp == "add") {
-      cin >> p >> l;
-      s.insert({l,p});
-      pindex[p] = l;
-    }
-
-    else if(tmp == "recommend") {
-      cin >> x;
-      if(x == 1) {
-        cout << s.rbegin()->second << '\n';
-      }
-      else if(x == -1) {
-        cout << s.begin()->second << '\n';
-      }
-    }
-
-    else if(tmp == "solved") {
-      cin >> p;
-      s.erase({pindex[p], p});
-      pindex.erase(p);
-    }
-  }
+  input();
+  solve();
   return 0;
 }
