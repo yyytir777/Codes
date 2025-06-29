@@ -1,73 +1,29 @@
-// 11054 cpp
+// 2133 cpp
 #include <bits/stdc++.h>
-#include <cstdarg>
-#define MAX 1001
+#define MAX 32
 using namespace std;
 
+typedef long long ll;
+
 int n;
-int arr[MAX], dp1[MAX], dp2[MAX];
+ll dp[MAX] = {0,};
 
-void input() {
-  cin >> n;
-  for (int i = 0; i < n; i++) {
-    cin >> arr[i];
-  }
-
-}
-
-void init_dp() {
-  for(int i = 0; i < n; i++) {
-    dp1[i] = 1;  
-    dp2[i] = 1;
-  }
-}
-
-void increase_dp() {
-  for(int i = 1; i < n; i++) {
-    for(int j = 0; j < i; j++) {
-      if(arr[j] < arr[i]){
-        dp1[i] = max(dp1[i], dp1[j] + 1);
-      }
-    }
-  }
-}
-
-void decrease_dp() {
-  for(int i = n - 2; i >= 0; i--) {
-    for(int j = n - 1; j > i; j--) {
-      if(arr[j] < arr[i]) {
-        dp2[i] = max(dp2[i], dp2[j] + 1);
-      }
-    }
-  }
-}
 
 void solve() {
-  init_dp();
-  increase_dp();
-  decrease_dp();
+  cin >> n;
+  dp[2] = 3;
 
-  // for(int i = 0; i < n; i++) {
-  //   cout << dp1[i] << " ";
-  // }
-
-  // cout << "\n\n";
-
-  // for(int i = 0; i < n; i++) {
-  //   cout << dp2[i] << " ";
-  // }
-
-  int max_result = 0;
-  for(int i = 0; i < n; i++) {
-    max_result = max(max_result, dp1[i] + dp2[i]);
-    // printf("idx : %d => %d / %d\n", i, dp1[i], dp2[i]);
+  for(int i = 4; i <= n; i += 2) {
+    dp[i] += dp[i-2] * 3 + 2;
+    for(int j = 4; j < i; j += 2) {
+      dp[i] += 2 * dp[i-j];
+    }
   }
 
-  cout << max_result - 1;
+  cout << dp[n];
 }
 
 int main() {
-  input();
   solve();
   return 0;
 }

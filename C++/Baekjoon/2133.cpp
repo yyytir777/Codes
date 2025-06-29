@@ -1,33 +1,29 @@
+// 2133 cpp
 #include <bits/stdc++.h>
-#define MAX 31
+#define MAX 32
 using namespace std;
 
+typedef long long ll;
+
 int n;
-int dp[MAX];
+ll dp[MAX] = {0,};
 
-/*
 
-dp[4] = dp[2] * dp[2] + 2
-dp[6] = dp[2]dp[4] + dp[4]dp[2] = dp[2] * 2 + dp[4] * 3
-dp[8] = dp[6]dp[2] + dp[4]dp[4] = dp[6] * dp[2] + dp
+void solve() {
+  cin >> n;
+  dp[2] = 3;
 
-*/
+  for(int i = 4; i <= n; i += 2) {
+    dp[i] += dp[i-2] * 3 + 2;
+    for(int j = 4; j < i; j += 2) {
+      dp[i] += 2 * dp[i-j];
+    }
+  }
+
+  cout << dp[n];
+}
+
 int main() {
-    cin >> n;
-
-    dp[0] = 0;
-    dp[1] = 0;
-    dp[2] = 3;
-
-    if(n % 2 != 0) {
-        cout << "0";
-        return;
-    }
-
-    for(int i = 4; i <= n; i++) {
-        
-    }
-
-    cout << dp[n];
-    return;
+  solve();
+  return 0;
 }
