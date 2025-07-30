@@ -1,37 +1,54 @@
-// 1072 cpp 
+// 2776 cpp
 #include <bits/stdc++.h>
+#define MAX 1000001
 using namespace std;
 
-typedef long long ll;
+int t, n, m, answer = 0;
+int note1[MAX], note2[MAX];
 
-ll x, y;
+void input() {
+  cin >> n;
+  for(int i = 0; i < n; i++) {
+    cin >> note1[i];
+  }
+
+  cin >> m;
+  for(int i = 0; i < m; i++) {
+    cin >> note2[i];
+  }
+}
+
+bool binary_search(int num) {
+  int start = 0, end = n - 1;
+
+  while(start <= end) {
+    int mid = (start + end) / 2;
+
+    if(note1[mid] == num) return true;
+
+    if(note1[mid] > num) end = mid - 1;
+    else start = mid + 1;
+  }
+
+  return false;
+}
 
 void solve() {
-  cin>>x>>y;
-  ll z = ((double)y * 100 / x);
-  if(z >= 99) {
-    cout << "-1";
-    return;
-  }
+  sort(note1, note1 + n);
+  
+  for(int i = 0; i < m; i++) {
+    int num = note2[i];
 
-  ll start = 1, end = x;
-  while(start <= end) {
-    // mid : 몇 번 더 해야하는지
-    ll mid = (start + end) / 2;
-
-    ll diff = ((double) (y + mid) * 100 / (x + mid));
-    // printf("s : %d, e : %d, mid : %d, diff : %d\n", start, end, mid, diff);
-    if(diff <= z) {
-      start = mid + 1;
-    }
-    else {
-      end = mid - 1;
-    }
+    bool isExisted = binary_search(num);
+    cout << isExisted << '\n';
   }
-  cout << start;
 }
 
 int main() {
-  solve();
+  cin >> t;
+  while(t--) {
+    input();
+    solve();  
+  }
   return 0;
 }
