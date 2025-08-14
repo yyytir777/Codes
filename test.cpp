@@ -1,75 +1,42 @@
-// 1092 cpp
+// 13305 cpp
 #include <bits/stdc++.h>
-#define MAX 10001
+#define INF 2200000000
 using namespace std;
 
-int n, m;
-bool visited[MAX] = {0,};
-vector<int> crains, boxes;
+typedef unsigned long long ll;
+
+int n;
+vector<ll> city;
+vector<ll> cost;
 
 void input() {
-  int tmp;
   cin >> n;
+
+  int tmp;
+  for(int i = 0; i < n - 1; i++) {
+    cin >> tmp;
+    city.push_back(tmp);
+  }
 
   for(int i = 0; i < n; i++) {
     cin >> tmp;
-    crains.push_back(tmp);
+    cost.push_back(tmp);
   }
-
-  cin >> m;
-  for(int i = 0; i < m; i++) {
-    cin >> tmp;
-    boxes.push_back(tmp);
-  }
-}
-
-bool compare(int a, int b) {
-  return a > b;
-}
-
-bool allVisited() {
-  for(int i = 0; i < m; i++) {
-    if(!visited[i]) return false;
-  }
-  return true;
 }
 
 void solve() {
-  sort(crains.begin(), crains.end(), compare);
-  sort(boxes.begin(), boxes.end(), compare);
-
-  if(boxes[0] > crains[0]) {
-    cout << "-1";
-    return;
-  }
-
-  int answer = 0;
-  int cnt = 0;
-
-  while(cnt < m) {
-    int crain_idx = 0, box_idx = 0;
-    while(crain_idx < n && box_idx < m) {
-
-      // box_idx 업데이트
-      while(box_idx < m && visited[box_idx]) box_idx++;
-      if(box_idx >= m) {
-        break;
-      } 
-
-      // printf("processing... crain_idx : %d / box_idx : %d\n", crain_idx, box_idx);
-
-      if(crains[crain_idx] >= boxes[box_idx]) {
-        visited[box_idx] = 1;
-        crain_idx++;
-        cnt++;
-      }
-
-      box_idx++;
+  ll sum = 0;
+  int city_idx = 0, min_idx = 0;
+  while(city_idx < n - 1) {
+    if(cost[min_idx] >= cost[city_idx]) {
+      min_idx = city_idx;
     }
-    answer++;
+    ll city_sum = cost[min_idx] * city[city_idx];
+    city_idx++;
+    // cout << city_sum << "\n";
+    sum += city_sum;
   }
-
-  cout << answer;
+  cout << sum;
 }
 
 int main() {
