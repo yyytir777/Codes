@@ -1,95 +1,83 @@
-// 1080 cpp
+// 11501 cpp
 #include <bits/stdc++.h>
-#define MAX 51
+#define MAX 1000001
 using namespace std;
 
-int n, m;
-int a[MAX][MAX];
-int b[MAX][MAX];
+int tc, n;
+bool increased[MAX];
+vector<int> stocks;
+
+void init() {
+  stocks.clear();
+  for(int i = 0; i < MAX; i++) {
+    increased[i] = 0;
+  }
+}
 
 void input() {
-  cin >> n >> m;
-  
-  for(int i = 0; i < n; i++) {
-    string tmp;
+  cin >> n;
+
+  int tmp;
+  for(int i = 0 ; i < n; i++) {
     cin >> tmp;
-    for(int j = 0; j < m; j++) {
-        a[i][j] = tmp[j] - '0';
-    }
-  }
-
-  for(int i = 0; i < n; i++) {
-    string tmp;
-    cin >> tmp;
-    for(int j = 0; j < m; j++) {
-      b[i][j] = tmp[j] - '0';
-    }
+    stocks.push_back(tmp);
   }
 }
 
-void swap(int idx1, int idx2) {
-  for(int i = idx1; i < idx1 + 3; i++) {
-    for(int j = idx2; j < idx2 + 3; j++) {
-      a[i][j] = a[i][j] == 0 ? 1 : 0;
-    }
+void print() {
+  for(auto stock : stocks) {
+    cout << stock << " ";
+  }
+  cout << "\n\n";
+}
+
+void increase(int s, int e) {
+  for(int i = s; i <= e; i++) {
+    increased[i] = 1;
   }
 }
 
-void print_a() {
-  for(int i = 0; i < n; i++) {
-    for(int j = 0; j < m; j++) {
-      cout << a[i][j] << " ";
+/* 위에서부터 계산하기...? */
+void cal_increase() {
+  int max = stocks[n-1];
+  for(int i = n-1; i > 0; i--) {
+    if(stocks[i-1] > max) {
+      max = stocks[i-1];
     }
-    cout << '\n';
-  }
-}
-
-void print_b() {
-  for(int i = 0; i < n; i++) {
-    for(int j = 0; j < m; j++) {
-      cout << b[i][j] << " ";
+    else if(stocks[i-1] < max) {
+      increased[i-1] = 1;
     }
-    cout << '\n';
   }
 }
 
 void solve() {
-  if(n < 3 || m < 3) {
-    for(int i = 0; i < n; i++) {
-      for(int j = 0; j < m; j++) {
-        if(a[i][j] != b[i][j]) {
-          cout << "-1";
-          return;
-        }
-      }
-    }
-    cout << "0";
-    return;
-  }
+  cal_increase();
 
-  int answer = 0;
-  for(int i = 0; i < n - 2; i++) {
-    for(int j = 0; j < m - 2; j++) {
-      if(a[i][j] != b[i][j]) {
-        swap(i, j);
-        answer++;
-      }
-    }
-  }
+  // for(int i = 0; i < n - 1; i++) {
+  //   cout << increased[i] << " ";
+  // }
+  // cout << '\n';
 
-  for(int i = 0; i < n; i++) {
-    for(int j = 0; j < m; j++) {
-      if(a[i][j] != b[i][j]) {
-        cout << "-1";
-        return;
-      }
+  long long sum = 0;
+  int size = 0;
+  for(int i = 0; i < stocks.size() - 1; i++) {
+    if(!increased[i]) {
+      size = 0;
+    }
+    else if(increased[i]) {
+      size++;
+      sum += size * (stocks[i+1] - stocks[i]);
     }
   }
-  cout << answer;
+  cout << sum << '\n';
 }
 
 int main() {
-  input();
-  solve();
+  cin >> tc;
+  while(tc--) {
+    init();
+    input();
+    solve();
+  }
   return 0;
 }
