@@ -1,37 +1,91 @@
-// 1890 cpp
+// 1080 cpp
 #include <bits/stdc++.h>
-#define MAX 101
+#define MAX 51
 using namespace std;
 
-typedef long long ll;
-typedef pair<int, int> Pair;
-
-int n;
-int board[MAX][MAX];
-bool visited[MAX][MAX] = {0,};
-ll dp[MAX][MAX] = {0,};
+int n, m;
+int a[MAX][MAX];
+int b[MAX][MAX];
 
 void input() {
-  cin >> n;
+  cin >> n >> m;
+  
   for(int i = 0; i < n; i++) {
-    for(int j = 0; j < n; j++) {
-      cin >> board[i][j];
+    string tmp;
+    cin >> tmp;
+    for(int j = 0; j < m; j++) {
+        a[i][j] = tmp[j] - '0';
+    }
+  }
+
+  for(int i = 0; i < n; i++) {
+    string tmp;
+    cin >> tmp;
+    for(int j = 0; j < m; j++) {
+      b[i][j] = tmp[j] - '0';
     }
   }
 }
 
-void solve() {
-  dp[n-1][n-1] = 1;
-  for(int i = n - 1; i >= 0; i--) {
-    for(int j = n - 1; j >= 0; j--) {
-      int dist = board[i][j];
+void swap(int idx1, int idx2) {
+  for(int i = idx1; i < idx1 + 3; i++) {
+    for(int j = idx2; j < idx2 + 3; j++) {
+      a[i][j] = a[i][j] == 0 ? 1 : 0;
+    }
+  }
+}
 
-      if(i == n - 1 && j == n - 1) continue;
-      dp[i][j] = dp[i][j+dist] + dp[i+dist][j];
+void print_a() {
+  for(int i = 0; i < n; i++) {
+    for(int j = 0; j < m; j++) {
+      cout << a[i][j] << " ";
+    }
+    cout << '\n';
+  }
+}
+
+void print_b() {
+  for(int i = 0; i < n; i++) {
+    for(int j = 0; j < m; j++) {
+      cout << b[i][j] << " ";
+    }
+    cout << '\n';
+  }
+}
+
+void solve() {
+  if(n < 3 || m < 3) {
+    for(int i = 0; i < n; i++) {
+      for(int j = 0; j < m; j++) {
+        if(a[i][j] != b[i][j]) {
+          cout << "-1";
+          return;
+        }
+      }
+    }
+    cout << "0";
+    return;
+  }
+
+  int answer = 0;
+  for(int i = 0; i < n - 2; i++) {
+    for(int j = 0; j < m - 2; j++) {
+      if(a[i][j] != b[i][j]) {
+        swap(i, j);
+        answer++;
+      }
     }
   }
 
-  cout << dp[0][0];
+  for(int i = 0; i < n; i++) {
+    for(int j = 0; j < m; j++) {
+      if(a[i][j] != b[i][j]) {
+        cout << "-1";
+        return;
+      }
+    }
+  }
+  cout << answer;
 }
 
 int main() {
