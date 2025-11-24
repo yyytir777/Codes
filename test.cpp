@@ -1,83 +1,92 @@
-// 11501 cpp
+// 1600 cpp
 #include <bits/stdc++.h>
-#define MAX 1000001
+#define INF 987654321
+#define MAX 201
+#define BLANK 0
+#define WALL 1
 using namespace std;
 
-int tc, n;
-bool increased[MAX];
-vector<int> stocks;
+typedef pair<int,int> Pair;
 
-void init() {
-  stocks.clear();
-  for(int i = 0; i < MAX; i++) {
-    increased[i] = 0;
-  }
-}
+int k, w, h;
+int graph[MAX][MAX];
+// [말 이동 횟수][row][col]; -> 키포인트
+bool visited[30][MAX][MAX] = {0,};
+int cnts_min = INF;
+
+int x_axis[4] = {1, -1, 0, 0};
+int y_axis[4] = {0, 0, -1, 1};
+
+int x_horse[8] = {1, 2, 2, 1, -1, -2, -2, -1};
+int y_horse[8] = {2, 1, -1, -2, -2, -1, 1, 2};
 
 void input() {
-  cin >> n;
+  cin >> k;
+  cin >> w >> h;
 
   int tmp;
-  for(int i = 0 ; i < n; i++) {
-    cin >> tmp;
-    stocks.push_back(tmp);
-  }
-}
-
-void print() {
-  for(auto stock : stocks) {
-    cout << stock << " ";
-  }
-  cout << "\n\n";
-}
-
-void increase(int s, int e) {
-  for(int i = s; i <= e; i++) {
-    increased[i] = 1;
-  }
-}
-
-/* 위에서부터 계산하기...? */
-void cal_increase() {
-  int max = stocks[n-1];
-  for(int i = n-1; i > 0; i--) {
-    if(stocks[i-1] > max) {
-      max = stocks[i-1];
+  for(int i = 0; i < h; i++) {
+    for(int j = 0; j < w; j++) {
+      cin >> graph[i][j];
     }
-    else if(stocks[i-1] < max) {
-      increased[i-1] = 1;
+  }
+}
+
+void bfs(Pair start) {
+  queue<pair<Pair, Pair>> q;
+  q.push({start, {0, 0}});
+  visited[0][start.first][start.second] = 1;
+
+
+  while(!q.empty()) {
+    Pair node = q.front().first;
+    Pair info = q.front().second;
+    // printf("(%d, %d)\n", node.first, node.second);
+    q.pop();
+
+    if(node.first == h-1 && node.second == w-1) {
+      cnts_min = min(cnts_min, info.second);
+      return;
+    }
+
+    for(int i = 0; i < 4; i++) {
+      int nxt_x = node.first + x_axis[i];
+      int nxt_y = node.second + y_axis[i];
+
+      if(nxt_x >= h || nxt_y >= w || nxt_x < 0 || nxt_y < 0) continue;
+      if(visited[info.first][nxt_x][nxt_y] || graph[nxt_x][nxt_y] == WALL) continue;
+
+      visited[info.first][nxt_x][nxt_y] = 1;
+      q.push({{nxt_x, nxt_y}, {info.first, info.second + 1}});
+    }
+
+    if(info.first < k) {
+      for(int i = 0; i < 8; i++) {
+        int nxt_x = node.first + x_horse[i];
+        int nxt_y = node.second + y_horse[i];
+
+        if(nxt_x >= h || nxt_y >= w || nxt_x < 0 || nxt_y < 0) continue;
+        if(visited[info.first + 1][nxt_x][nxt_y] || graph[nxt_x][nxt_y] == WALL) continue;
+
+        visited[info.first + 1][nxt_x][nxt_y] = 1;
+        q.push({{nxt_x, nxt_y}, {info.first + 1, info.second + 1}});
+      }
     }
   }
 }
 
 void solve() {
-  cal_increase();
+  bfs({0,0});
 
-  // for(int i = 0; i < n - 1; i++) {
-  //   cout << increased[i] << " ";
-  // }
-  // cout << '\n';
-
-  long long sum = 0;
-  int size = 0;
-  for(int i = 0; i < stocks.size() - 1; i++) {
-    if(!increased[i]) {
-      size = 0;
-    }
-    else if(increased[i]) {
-      size++;
-      sum += size * (stocks[i+1] - stocks[i]);
-    }
+  if(cnts_min != INF) {
+    cout << cnts_min;
+  } else {
+    cout << "-1";
   }
-  cout << sum << '\n';
 }
 
 int main() {
-  cin >> tc;
-  while(tc--) {
-    init();
-    input();
-    solve();
-  }
+  input();
+  solve();
   return 0;
 }
