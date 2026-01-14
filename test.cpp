@@ -1,82 +1,123 @@
-// 2251 cpp
+// 1584 cpp
 #include <bits/stdc++.h>
-#define MAX 201
+#define INF 987654321
+#define MAX 501
+#define SAFE 0
+#define RISK 1
+#define DEATH INF
 using namespace std;
 
-struct Node {
-  int a;
-  int b;
-  int c;
-};
+typedef pair<int, int> Pair;
 
-int a, b, c;
+int graph[MAX][MAX] = {0,};
+bool visited[MAX][MAX] = {0,};
+priority_queue<pair<int, Pair>> pq;
 
-bool visited[MAX][MAX][MAX];
-set<int> s;
+int n, m;
+int dist[MAX][MAX];
 
-vector<Node> getNextNodes(Node cur) {
-  vector<Node> v;
-  int na, nb, nc;
+int r_axis[4] = {1, -1, 0, 0};
+int c_axis[4] = {0, 0, 1, -1};
 
-  // A -> B
-  int move = min(cur.a, b - cur.b);
-  v.push_back(Node({cur.a - move, cur.b + move, cur.c}));
+void input() {
+  cin >> n;
+  int x1, y1, x2, y2;
+  for(int i = 0; i < n; i++) {
+    cin >> x1 >> y1 >> x2 >> y2;
 
-  // A -> C
-  move = min(cur.a, c - cur.c);
-  v.push_back(Node({cur.a - move, cur.b, cur.c + move}));
+    for(int i = min(x1, x2); i <= max(x1, x2); i++) {
+      for(int j = min(y1, y2); j <= max(y1, y2); j++) {
+        graph[i][j] = RISK;
+      }
+    }
+  }
 
-  // B -> A
-  move = min(cur.b, a - cur.a);
-  v.push_back(Node({cur.a + move, cur.b - move, cur.c}));
+  cin >> m;
+  for(int i = 0; i < m; i++) {
+    cin >> x1 >> y1 >> x2 >> y2;
 
-  // B -> C
-  move = min(cur.b, c - cur.c);
-  v.push_back(Node({cur.a, cur.b - move, cur.c + move}));
-
-  // C -> A
-  move = min(cur.c, a - cur.a);
-  v.push_back(Node({cur.a + move, cur.b, cur.c - move}));
-
-  // C -> B
-  move = min(cur.c, b - cur.b);
-  v.push_back(Node({cur.a, cur.b + move, cur.c - move}));
-
-  return v;
+    for(int i = min(x1, x2); i <= max(x1, x2); i++) {
+      for(int j = min(y1, y2); j <= max(y1, y2); j++) {
+        graph[i][j] = DEATH;
+      }
+    }
+  }
 }
 
-void dfs(Node node) {
-  queue<Node> q;
-  visited[node.a][node.b][node.c] = 1;
-  q.push(node);
+void init() {
+  for(int i = 0; i < MAX; i++) {
+    for(int j = 0; j < MAX; j++) {
+      dist[i][j] = INF;
+    }
+  }
+}
 
-  while(!q.empty()) {
-    Node curNode = q.front();
-    q.pop();
+bool isRisk(Pair prev, Pair cur) {
+  if(graph[prev.first][prev.second] == SAFE &&
+    graph[cur.first][cur.second] == RISK) {
+    return true;
+  }
+  return false;
+}
 
-    if(curNode.a == 0) {
-      s.insert(curNode.c);
+bool isDeath(Pair cur) {
+  if(graph[cur.first][cur.second] == DEATH) {
+    return true;
+  }
+  return false;
+}
+
+
+void dijkstra() {
+  Pair start = {0,0};
+
+  pq.push({0, start});
+
+
+  while(!pq.empty()) {
+    pair<int, Pair> node = pq.top();
+    pq.pop();
+
+    int cur_dist = -node.first;
+    Pair cur_node = node.second;
+
+    if(cur_node.first == 500 && cur_node.second == 500) {
+      return;
     }
 
-    vector<Node> nxtNodes = getNextNodes(curNode);
-    for(Node node : nxtNodes) {
-      if(!visited[node.a][node.b][node.c]) {
-        visited[node.a][node.b][node.c] = 1;
-        q.push(node);
-      }
-    }  
+    for(int i = 0; i < 4; i++) {
+      int nxt_r = cur_node.first + r_axis[i];
+      int nxt_c = cur_node.second + c_axis[i];
+      int nxt_dist = cur_dist + graph[nxt_r][nxt_c];
+
+      if(nxt_c < 0 || nxt_c >= MAX || nxt_r < 0 || nxt_r >= MAX) continue;
+
+      if(isDeath({nxt_r, nxt_c})) continue;
+
+      if(visited[nxt_r][nxt_c]) continue;
+
+      if(nxt_dist > dist[nxt_r][nxt_c]) continue;
+
+      dist[nxt_r][nxt_c] = nxt_dist;
+      pq.push({-nxt_dist, {nxt_r, nxt_c}});
+      visited[nxt_r][nxt_c] = 1;
+    }
   }
 }
 
 void solve() {
-  dfs(Node({0, 0, c}));
-  for(auto node : s) {
-    cout << node << " ";
+  init();
+  dijkstra();
+
+  if(dist[500][500] == INF) {
+    cout << "-1";
+  } else {
+    cout << dist[500][500];
   }
 }
 
 int main() {
-  cin >> a >> b >> c;
+  input();
   solve();
   return 0;
 }
