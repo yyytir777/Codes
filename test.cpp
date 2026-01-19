@@ -1,145 +1,84 @@
-// 14497 cpp
+// 1027 cpp
 #include <bits/stdc++.h>
-#define MAX 301
-#define BLANK 0
-#define WALL 1
-#define TEMP 2
-#define ME '*'
-#define CHOCOBAR '#'
+#define INF 987654321
+#define MAX 51
 using namespace std;
 
-typedef pair<int, int> Pair;
-int n, m;
-int graph[MAX][MAX];
-bool visited[MAX][MAX] = {0,};
 
-pair<int, int> chocobar;
-pair<int, int> me;
+typedef long long ll;
 
-void init() {
-  for(int i = 1; i <= n; i++) {
-    for(int j = 1; j <= m; j++) {
-      visited[i][j] = 0;
-    }
-  }
-}
+int n;
+ll buildings[MAX];
 
 void input() {
-  cin >> n >> m;
 
-  cin >> me.first >> me.second;
-  cin >> chocobar.first >> chocobar.second;
-
-  string tmp;
-  for(int i = 0; i < n; i++) {
-    cin >> tmp;
-    for(int j = 0; j < m; j++) {
-      if(tmp[j] == ME) graph[i+1][j+1]= BLANK;
-      else if(tmp[j] == CHOCOBAR) graph[i+1][j+1] = BLANK;
-      else graph[i+1][j+1] = tmp[j] - '0';
-    }
-  }
-}
-
-int r_axis[4] = {0, 0, 1, -1};
-int c_axis[4] = {1, -1, 0, 0};
-
-bool isConnected() {
-  init();
-  Pair start = me;
-  queue<Pair> q;
-
-  q.push(start);
-  visited[start.first][start.second] = 1;
-
-  while(!q.empty()) {
-    Pair cur_node = q.front();
-    q.pop();
-
-    if(cur_node.first == chocobar.first && cur_node.second == chocobar.second) {
-      return true;
-    }
-
-    for(int i = 0; i < 4; i++) {
-      int nxt_r = cur_node.first + r_axis[i];
-      int nxt_c = cur_node.second + c_axis[i];
-
-      if(nxt_r <= 0 || nxt_r > n || nxt_c <= 0 || nxt_c > m) continue;
-
-      if(visited[nxt_r][nxt_c]) continue;
-
-      if(graph[nxt_r][nxt_c] == WALL) continue;
-
-      if(graph[nxt_r][nxt_c] == BLANK) {
-        visited[nxt_r][nxt_c] = 1;
-        q.push({nxt_r,nxt_c});
-      }
-    }
-  }
-
-  return false;
-} 
-
-void wave() {
-  init();
-  Pair start = me;
-  queue<Pair> q;
-
-  q.push(start);
-  visited[start.first][start.second] = 1;
-
-  while(!q.empty()) {
-    Pair cur_node = q.front();
-    q.pop();
-
-    for(int i = 0; i < 4; i++) {
-      int nxt_r = cur_node.first + r_axis[i];
-      int nxt_c = cur_node.second + c_axis[i];
-
-      if(nxt_r <= 0 || nxt_r > n || nxt_c <= 0 || nxt_c > m) continue;
-
-      if(visited[nxt_r][nxt_c]) continue;
-
-      if(graph[nxt_r][nxt_c] == WALL) {
-        graph[nxt_r][nxt_c] = TEMP;
-      }
-
-      if(graph[nxt_r][nxt_c] == BLANK) {
-        visited[nxt_r][nxt_c] = 1;
-        q.push({nxt_r,nxt_c});
-      }
-    }
-  }
-}
-
-void convertTempToBlank() {
+  cin >> n;
+  ll length;
   for(int i = 1; i <= n; i++) {
-    for(int j = 1; j <= m; j++) {
-      if(graph[i][j] == TEMP) graph[i][j] = BLANK;
-    }
+    cin >> length;
+    buildings[i] = length;
   }
 }
 
-void print() {
-  for(int i = 1; i <= n; i++) {
-    for(int j = 1; j <= m; j++) {
-      cout << graph[i][j] << " ";
-    }
-    cout << '\n';
+ll get(int idx) {
+  return buildings[idx];
+}
+
+/*
+
+b1 + (b2 - b1) / (a2 - a1) * (x - a1)
+
+*/
+bool isPossible(int start, int end) {
+  if(abs(start - end) == 1) return true; 
+  for(int i = start + 1; i < end; i++) {
+    double limit = (double) (get(end) - get(start)) * (i - start) / (end - start) + get(start);
+
+    if((double) get(i) >= limit) return false;
   }
+  
+  return true;
+}
+
+int search_left(int cur) {
+  int cnt = 0, idx = cur;
+
+  for(int i = 1; i < cur; i++) {
+    if(isPossible(i, cur)) cnt++;
+  }
+
+  return cnt;
+}
+
+int search_right(int cur) {
+  int cnt = 0, idx = cur;
+
+  for(int i = cur + 1; i <= n; i++) {
+    if(isPossible(cur, i)) cnt++;
+  }
+
+  return cnt;
 }
 
 void solve() {
   int cnt = 0;
+  for(int i = 1; i <= n; i++) {
 
-  while(!isConnected()) {
-    wave();
-    convertTempToBlank();
-    cnt++;
+    int cnt_l = search_left(i);
+    int cnt_r = search_right(i);
+
+    // printf("%d : %d\n", i, (cnt_l + cnt_r));
+    cnt = max(cnt_l + cnt_r, cnt);
   }
-  cout << cnt + 1;
+
+  cout << cnt;
 }
 
+void print() {
+  for(int i = 1; i <= n; i++) {
+    cout << get(i) << "\n";
+  }
+}
 
 int main() {
   input();
