@@ -1,83 +1,43 @@
-// 1027 cpp
+// 2631 cpp
 #include <bits/stdc++.h>
-#define INF 987654321
-#define MAX 51
+#define MAX 203
 using namespace std;
 
-
-typedef long long ll;
-
 int n;
-ll buildings[MAX];
+int line[MAX];
+// i번째 위치까지에서, 가장 긴 증가하는 수열 -> dp[i]
+int dp[MAX] = {1,};
 
 void input() {
-
   cin >> n;
-  ll length;
-  for(int i = 1; i <= n; i++) {
-    cin >> length;
-    buildings[i] = length;
+
+  for(int i = 1 ; i <= n; i++) {
+    cin >> line[i];
   }
-}
-
-ll get(int idx) {
-  return buildings[idx];
-}
-
-/*
-
-b1 + (b2 - b1) / (a2 - a1) * (x - a1)
-
-*/
-bool isPossible(int start, int end) {
-  if(abs(start - end) == 1) return true; 
-  for(int i = start + 1; i < end; i++) {
-    double limit = (double) (get(end) - get(start)) * (i - start) / (end - start) + get(start);
-
-    if((double) get(i) >= limit) return false;
-  }
-  
-  return true;
-}
-
-int search_left(int cur) {
-  int cnt = 0, idx = cur;
-
-  for(int i = 1; i < cur; i++) {
-    if(isPossible(i, cur)) cnt++;
-  }
-
-  return cnt;
-}
-
-int search_right(int cur) {
-  int cnt = 0, idx = cur;
-
-  for(int i = cur + 1; i <= n; i++) {
-    if(isPossible(cur, i)) cnt++;
-  }
-
-  return cnt;
 }
 
 void solve() {
-  int cnt = 0;
+
   for(int i = 1; i <= n; i++) {
-
-    int cnt_l = search_left(i);
-    int cnt_r = search_right(i);
-
-    // printf("%d : %d\n", i, (cnt_l + cnt_r));
-    cnt = max(cnt_l + cnt_r, cnt);
+    dp[i] = 1;
   }
 
-  cout << cnt;
-}
-
-void print() {
-  for(int i = 1; i <= n; i++) {
-    cout << get(i) << "\n";
+  int tmp = 0;
+  for(int i = 2; i <= n; i++) {
+    for(int j = 1; j < i; j++) {
+      
+      if(line[i] > line[j]) {
+        dp[i] = max(dp[j] + 1, dp[i]);
+      }
+    }
   }
+
+  int max_cnt = 0;
+  for(int i = 1; i <= n; i++) {
+    max_cnt = max(max_cnt, dp[i]);
+  }
+
+  cout << n - max_cnt;
 }
 
 int main() {
