@@ -1,82 +1,47 @@
-// 4659 cpp
+// 2533 cpp
 #include <bits/stdc++.h>
+#define MAX 1000001
 using namespace std;
 
-string pwd;
-char vowels[] = {'a', 'e', 'i', 'o', 'u'};
-bool flag;
+int n;
+int edges[MAX] = {0,};
+int dp[MAX][2];
+vector<int> graph[MAX];
 
+void input() {
+  cin >> n;
 
-bool hasVowel() {
-  for(int i = 0; i < pwd.size(); i++) {
-    for(char v : vowels) {
-      if(pwd[i] == v) return true;
-    }
+  int u, v;
+  for(int i = 1; i < n; i++) {
+    cin >> u >> v;
+    graph[u].push_back(v);
+    graph[v].push_back(u);
+    edges[u]++, edges[v]++;
   }
-  return false;
 }
 
-bool isRecur() {
-  int cnt = 1;
-  bool prevIsVowel = 0; // 모음이면 1, 자음이면 0
+void dfs(int cur, int parent) {
+  dp[cur][0] = 0;
+  dp[cur][1] = 1;
 
-  for(char v : vowels) {
-    if(pwd[0] == v) {
-      prevIsVowel = 1;
-      break;
-    }
+  for(int i = 0; i < graph[cur].size(); i++) {
+    int child = graph[cur][i];
+    if(child == parent) continue;
+
+    dfs(child, cur);
+
+    dp[cur][0] += dp[child][1];
+    dp[cur][1] += min(dp[child][0], dp[child][1]);
   }
-  
-  for(int i = 1; i < pwd.size(); i++) {
-    bool curIsVowel = 0;
-
-    for(char v : vowels) {
-      if(pwd[i] == v) {
-        curIsVowel = 1;
-        break;   
-      }
-    }
-
-    if(curIsVowel == prevIsVowel) {
-      cnt++;
-      if(cnt >= 3) return true;
-    }
-    else {
-      cnt = 1;
-      prevIsVowel = curIsVowel;
-    }
-  }
-
-  return false;
-}
-
-bool hasSameLetter() {
-  for(int i = 1; i < pwd.size(); i++) {
-    if(pwd[i] == pwd[i-1] && (pwd[i] != 'o' && pwd[i] != 'e')) {
-      return true;
-    }
-  }
-  return false;
 }
 
 void solve() {
-  flag = 0;
-  if(!hasVowel()) return;
-  if(isRecur()) return;
-  if(hasSameLetter()) return;
-  flag = 1;
+  dfs(1, 0);
+  cout << min(dp[1][1], dp[1][0]);
 }
 
 int main() {
-  while(cin >> pwd && pwd != "end") {
-    solve();
-
-    // 통과 
-    if(flag) {
-      printf("<%s> is acceptable.\n", pwd.c_str());
-    }
-    else {
-      printf("<%s> is not acceptable.\n", pwd.c_str());
-    }
-  }
+  input();
+  solve();
+  return 0;
 }
